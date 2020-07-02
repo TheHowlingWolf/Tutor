@@ -97,7 +97,7 @@ exports.isSignedIn = expressJwt({
 //Custom Middlewares
 exports.isAuthenticated = (req, res, next) => {
   //profile will be set from frontend only when the user is logged in and auth is the bearer authentication
-  let checker = req.profile && req.auth && req.profile._id == req.auth._id;
+  let checker = req.user && req.auth && req.user._id == req.auth._id;
   // req.profile from frontend  req.auth from isSignedIn and  req.profile._id === req.auth._id ids from frontend and backend matches
   if (!checker) {
     //false result
@@ -109,8 +109,18 @@ exports.isAuthenticated = (req, res, next) => {
   next();
 };
 
-exports.isAdmin = (req, res, next) => {
+exports.isStudent = (req, res, next) => {
   if (req.doc.role === 0) {
+    //regular Patient or pharmacy
+    return res.status(403).json({
+      error: "ACCESS DENIED",
+    });
+  }
+  next();
+};
+
+exports.isAdmin = (req, res, next) => {
+  if (req.doc.role === 1) {
     //regular Patient or pharmacy
     return res.status(403).json({
       error: "ACCESS DENIED",
