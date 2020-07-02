@@ -2,14 +2,18 @@ const mongoose = require('mongoose');
 const AnswerOptions = require('./AnswerOptions');
 
 const QuestionSchema = new mongoose.Schema({
-    Quetion: { Type: String },
+    title: { type: String },
     img: {
         data: Buffer,
         contentType: String
     },
     hasImg: { type: Boolean, default: false },
-    options: [AnswerOptions],
-    numCorrect: { type: Number, default: 1 }
+    options: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'AnswerOptions'
+    }],
+    numCorrect: { type: Number, default: 1 },
+
 })
 
 module.exports = mongoose.model("Question", QuestionSchema);    

@@ -9,6 +9,7 @@ const app = express();
 
 //My Routes
 const authRoutes = require("./routes/auth");
+const quizRoutes = require("./routes/quiz");
 
 //Connecting Mongoose-mongodb
 mongoose
@@ -32,6 +33,7 @@ app.use(cors());
 
 //My routes
 app.use("/api", authRoutes);
+app.use("/api", quizRoutes);
 
 //Connecting the app
 const port = process.env.PORT || 5000;

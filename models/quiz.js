@@ -12,7 +12,7 @@ const quizSchema = new Mongoose.Schema({
     required: true,
     ref: "Subject"
   },
-  questions: [QuizQuestions],
+  questions: [{ type: Mongoose.Schema.Types.ObjectId, ref: 'Question' }],
   time: { type: Number }
 });
 
