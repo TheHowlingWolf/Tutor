@@ -10,6 +10,10 @@ const userSchema = new mongoose.Schema(
       maxlength: 32,
       trim: true,
     },
+    class: [{
+      type: mongoose.Types.ObjectId,
+      ref: 'Class'
+    }],
     email: {
       type: String,
       required: true,
