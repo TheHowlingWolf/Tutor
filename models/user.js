@@ -14,6 +14,10 @@ const userSchema = new mongoose.Schema(
       type: mongoose.Types.ObjectId,
       ref: 'Class'
     }],
+    subject: [{
+      type: mongoose.Types.ObjectId,
+      ref: 'Subject'
+    }],
     email: {
       type: String,
       required: true,

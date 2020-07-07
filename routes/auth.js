@@ -11,13 +11,15 @@ const { signup, signin, signout, isSignedIn } = require("../controllers/auth");
 router.post(
   "/signup",
   [
-    check("name")
+    check("name","Name Should be atleast 3 characters.")
       .isLength({ min: 3 })
-      .withMessage("Name Should be atleast 3 characters."),
-    check("email").isEmail().withMessage("Email is Required"),
-    check("password")
+      ,
+    check("email","Email is Required").isEmail(),
+    check("password","Password Should be atleast 3 characters.")
       .isLength({ min: 3 })
-      .withMessage("Password Should be atleast 3 characters."),
+      ,
+      check("mob","Contact No. is not valid.")
+      .isLength(10)
   ],
   signup
 );

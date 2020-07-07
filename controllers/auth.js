@@ -28,6 +28,7 @@ exports.signup = (req, res) => {
   user.save((err, user) => {
     //gives back two para, error and user
     if (err) {
+
       return res.status(400).json({
         //passing this json to craft a error mesg in front end
         error:
@@ -38,8 +39,7 @@ exports.signup = (req, res) => {
       name: user.name,
       email: user.email,
       id: user._id,
-      mob: user.mob,
-      role: user.role,
+      mob: user.mob
     });
   });
 };
