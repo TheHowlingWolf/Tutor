@@ -1,30 +1,36 @@
 const mongoose = require('mongoose');
 
 const ClassSchema = new mongoose.Schema({
-    subject: {
-        type: mongoose.Types.ObjectId,
-        required: true
-    },
+
     classLink: {
         type: String,
         required: true
     },
-    teacher:{
-        type: mongoose.Types.ObjectId,
-        ref: 'User'
+    name:{
+        type: String,
+        // required: true
+    },
+    email:{
+        type: String,
+        // required: true
+    },
+    subject: {
+        type: String,
+        required: true
+    },
+    standard:{
+        type: String,
+        required: true
     },
     time:{
-        type: Date.prototype.setHours,
+        type: String,
         required: true
     },
     date:{
         type: Date,
         required: true
     },
-    category:{
-        type: String,
-        required: true
-    }
+    
 })
 
 module.exports = mongoose.model("Class", ClassSchema);

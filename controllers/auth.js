@@ -128,3 +128,13 @@ exports.isAdmin = (req, res, next) => {
   }
   next();
 };
+
+exports.isTeacher = (req, res, next) => {
+  if (req.doc.role === 2) {
+    //regular Patient or pharmacy
+    return res.status(403).json({
+      error: "ACCESS DENIED",
+    });
+  }
+  next();
+};
