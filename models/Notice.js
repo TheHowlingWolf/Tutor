@@ -5,7 +5,7 @@ const NoticeSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    description :{
+    description: {
         type: String,
         required: true
     },
@@ -13,6 +13,6 @@ const NoticeSchema = new mongoose.Schema({
         type: Date,
         required: true
     }
-})
+});
 
 module.exports = mongoose.model("Notice", NoticeSchema);
