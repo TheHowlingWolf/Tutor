@@ -44,6 +44,7 @@ exports.createClass = (req,res) =>{
     exports.removeClass = (req,res) =>{
         console.log("hi")
         const classO = req.classO;
+        console.log(req.classO);
         classO.remove((err,cat)=>{
             if(err){
                 return res.status(400).json({

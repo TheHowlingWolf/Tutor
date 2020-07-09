@@ -37,21 +37,22 @@ exports.createNotice = (req,res) =>{
     }
 
     exports.getANotice = (req,res) =>{
-        console.log(req.noticeO);
-        return res.json(req.noticeO);
+        console.log(req.NoticeO);
+        return res.json(req.NoticeO);
     }
 
     exports.removeNotice = (req,res) =>{
         console.log("hi")
-        const noticeO = req.noticeO;
-        noticeO.remove((err,cat)=>{
+        const noticeO = req.NoticeO;
+        console.log(req.NoticeO);
+        noticeO.remove((err, cat)=>{
             if(err){
                 return res.status(400).json({
                     error: "Failed to delete Notice"
                 })
             }
             res.json({
-                message: cat.subject + "Notice deleted"
+                message: cat.title + " Notice deleted"
             });
             }
         )
@@ -59,15 +60,15 @@ exports.createNotice = (req,res) =>{
     
     exports.updateNotice = (req,res) =>{
     
-        const noticeO = req.noticeO;
+        const noticeO = req.NoticeO;
         noticeO.title = req.body.title;
-        noticeO.description = req.body.desription;
+        noticeO.description = req.body.description;
         noticeO.date = req.body.date;
     
         noticeO.save((err,updatednoticeO) => {
             if(err || !updatednoticeO){
                 return res.status(400).json({
-                    error: "Notice not saved" + err
+                    error: "Notice not saved " + err
                 })
             }
            res.json(updatednoticeO)
