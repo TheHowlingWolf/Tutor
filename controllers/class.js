@@ -52,7 +52,7 @@ exports.createClass = (req,res) =>{
                 })
             }
             res.json({
-                message: cat.subject + "class deleted"
+                message: cat.subject + " class deleted"
             });
             }
         )
