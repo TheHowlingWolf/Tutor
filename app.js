@@ -12,6 +12,7 @@ const authRoutes = require("./routes/auth");
 const quizRoutes = require("./routes/quiz");
 const classRoutes = require("./routes/class");
 const noticeRoutes = require("./routes/notice");
+const userRoutes = require("./routes/user");
 
 //Connecting Mongoose-mongodb
 mongoose
@@ -38,6 +39,7 @@ app.use("/api", authRoutes);
 app.use("/api", quizRoutes);
 app.use("/api", classRoutes);
 app.use("/api", noticeRoutes);
+app.use("/api", userRoutes);
 
 //Connecting the app
 const port = process.env.PORT || 5000;
