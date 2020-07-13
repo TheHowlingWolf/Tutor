@@ -10,12 +10,11 @@ const app = express();
 const authRoutes = require("./routes/auth");
 const quizRoutes = require("./routes/quiz");
 const classRoutes = require("./routes/class");
-<<<<<<< HEAD
 const paymentRoutes = require("./routes/payment");
-=======
 const noticeRoutes = require("./routes/notice");
 const userRoutes = require("./routes/user");
->>>>>>> 0594b4302ca343ba541b159c10e6b73fa58453df
+const classroomRoutes = require("./routes/classroom");
+
 
 //Connecting Mongoose-mongodb
 mongoose
@@ -44,6 +43,7 @@ app.use("/api", classRoutes);
 app.use("/api", paymentRoutes);
 app.use("/api", noticeRoutes);
 app.use("/api", userRoutes);
+app.use("/api", classroomRoutes)
 
 
 app.get('/logo.svg',(req,res)=>{
