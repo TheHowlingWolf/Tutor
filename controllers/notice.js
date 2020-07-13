@@ -1,4 +1,4 @@
-const NoticeO = require("../models/notice");
+const NoticeO = require("../models/Notice");
 
 exports.getNoticeById = (req, res, next, id) => {
     NoticeO.findById(id).exec((err, obj)=>{     

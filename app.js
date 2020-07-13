@@ -13,6 +13,7 @@ const quizRoutes = require("./routes/quiz");
 const classRoutes = require("./routes/class");
 const noticeRoutes = require("./routes/notice");
 const userRoutes = require("./routes/user");
+const classroomRoutes = require("./routes/classroom");
 
 //Connecting Mongoose-mongodb
 mongoose
@@ -40,6 +41,7 @@ app.use("/api", quizRoutes);
 app.use("/api", classRoutes);
 app.use("/api", noticeRoutes);
 app.use("/api", userRoutes);
+app.use("/api", classroomRoutes)
 
 //Connecting the app
 const port = process.env.PORT || 5000;
