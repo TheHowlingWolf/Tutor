@@ -41,3 +41,22 @@ exports.photoUser = (req, res, next) => {
   }
   next();
 };
+
+exports.updatedUser = (req, res) =>{
+  User.findByIdAndUpdate({_id: req.profile._id},
+      {$set: req.body},
+      {new: true,useFindAndModify: false},
+      (err,user) => {
+          if(err){
+              return res.status(400).json({
+                  error: "Updating not authorized"
+              })
+          }
+          req.profile.salt = undefined;
+          req.profile.encryptedpassword = undefined;
+          req.profile.createdAt = undefined;
+          req.profile.updatedAt = undefined;
+          res.json(user);
+      }
+      );
+}

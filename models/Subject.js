@@ -4,6 +4,13 @@ const SubjectSchema = new mongoose.Schema({
     name: {
         type: String,
         required: true
+    },
+    price: {
+        type: Number
+    },
+    paymentStatus: {
+        type: Number,
+        default: 0
     }
 })
 

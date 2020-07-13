@@ -6,11 +6,11 @@ const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
 const app = express();
-
 //My Routes
 const authRoutes = require("./routes/auth");
 const quizRoutes = require("./routes/quiz");
 const classRoutes = require("./routes/class");
+const paymentRoutes = require("./routes/payment");
 
 //Connecting Mongoose-mongodb
 mongoose
@@ -36,6 +36,21 @@ app.use(cors());
 app.use("/api", authRoutes);
 app.use("/api", quizRoutes);
 app.use("/api", classRoutes);
+app.use("/api", paymentRoutes);
+
+// //Serve static assets
+// if(process.env.NODE_ENV === 'production'){
+//   app.use(express.static('./tution/build'));
+
+//   app.get('*',(req,res)=>{
+//     res.sendFile(path.resolve(__dirname,'tution','build', 'index.html'))
+//   })
+// }
+
+app.get('/logo.svg',(req,res)=>{
+ 
+  res.sendFile(path.join(__dirname,'logo.svg'))
+})
 
 //Connecting the app
 const port = process.env.PORT || 5000;

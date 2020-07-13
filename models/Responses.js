@@ -8,12 +8,12 @@ const ResponseSchema = new mongoose.Schema({
         ref: 'Quiz',
         required: true
     },
-    question: {
+    questions: {
         type: mongoose.Types.ObjectId,
         ref: 'Question',
         required: true
     },
-    answerOption: {
+    responseOption: {
         type: mongoose.Types.ObjectId,
         ref: 'AnswerOption',
         required: true
@@ -22,7 +22,8 @@ const ResponseSchema = new mongoose.Schema({
         type: mongoose.Types.ObjectId,
         ref: 'user',
         required: true
-    }
+    },
+    totalMarks:{}
 })
 
 

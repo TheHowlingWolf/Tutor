@@ -1,0 +1,43 @@
+{
+    "entity": "event",
+    "account_id": "acc_FDKkIb3R9o48Se",
+    "event": "payment.captured",
+    "contains": [
+        "payment"
+    ],
+    "payload": {
+        "payment": {
+            "entity": {
+                "id": "pay_FDUKlQClmZinL5",
+                "entity": "payment",
+                "amount": 50000,
+                "currency": "INR",
+                "status": "captured",
+                "order_id": "order_FDUJspA8ItR0go",
+                "invoice_id": null,
+                "international": false,
+                "method": "wallet",
+                "amount_refunded": 0,
+                "refund_status": null,
+                "captured": true,
+                "description": "Thanks for enrolling with the best!",
+                "card_id": null,
+                "bank": null,
+                "wallet": "payzapp",
+                "vpa": null,
+                "email": "182@q.com",
+                "contact": "+919431197050",
+                "notes": [],
+                "fee": 1180,
+                "tax": 180,
+                "error_code": null,
+                "error_description": null,
+                "error_source": null,
+                "error_step": null,
+                "error_reason": null,
+                "created_at": 1594535947
+            }
+        }
+    },
+    "created_at": 1594535961
+}

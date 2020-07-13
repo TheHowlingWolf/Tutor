@@ -6,6 +6,7 @@ const {
   getOneUser,
   getAllUsers,
   photoUser,
+  updatedUser
 } = require("../controllers/user");
 
 const { isAdmin, isAuthenticated, isSignedIn } = require("../controllers/auth");
@@ -17,6 +18,9 @@ router.param("userId", getUserById);
 
 //Getting One User
 router.get("/user/:userId", isSignedIn, getOneUser);
+
+//Updating user
+router.get("/update/:userId", isSignedIn, updatedUser);
 
 //Getting All User
 router.get("/users", getAllUsers);
