@@ -24,11 +24,11 @@ const ClassSchema = new mongoose.Schema({
     },
     time:{
         type: String,
-        required: true
+        // required: true
     },
     date:{
         type: Date,
-        required: true
+        // required: true
     },
     
 })

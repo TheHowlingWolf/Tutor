@@ -24,9 +24,9 @@ exports.getOneUser = (req, res) => {
 //Getting All Users
 exports.getAllUsers = (req, res, next) => {
   User.find().exec((err, users) => {
-    if (err || !docs) {
+    if (err || !users) {
       return res.status(400).json({
-        error: "No Doc found.",
+        error: "No User found.",
       });
     }
     return res.status(200).json(users);

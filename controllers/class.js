@@ -44,6 +44,7 @@ exports.createClass = (req,res) =>{
     exports.removeClass = (req,res) =>{
         console.log("hi")
         const classO = req.classO;
+        console.log(req.classO);
         classO.remove((err,cat)=>{
             if(err){
                 return res.status(400).json({
@@ -51,7 +52,7 @@ exports.createClass = (req,res) =>{
                 })
             }
             res.json({
-                message: cat.subject + "class deleted"
+                message: cat.subject + " class deleted"
             });
             }
         )

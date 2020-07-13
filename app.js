@@ -10,7 +10,12 @@ const app = express();
 const authRoutes = require("./routes/auth");
 const quizRoutes = require("./routes/quiz");
 const classRoutes = require("./routes/class");
+<<<<<<< HEAD
 const paymentRoutes = require("./routes/payment");
+=======
+const noticeRoutes = require("./routes/notice");
+const userRoutes = require("./routes/user");
+>>>>>>> 0594b4302ca343ba541b159c10e6b73fa58453df
 
 //Connecting Mongoose-mongodb
 mongoose
@@ -37,20 +42,15 @@ app.use("/api", authRoutes);
 app.use("/api", quizRoutes);
 app.use("/api", classRoutes);
 app.use("/api", paymentRoutes);
+app.use("/api", noticeRoutes);
+app.use("/api", userRoutes);
 
-// //Serve static assets
-// if(process.env.NODE_ENV === 'production'){
-//   app.use(express.static('./tution/build'));
-
-//   app.get('*',(req,res)=>{
-//     res.sendFile(path.resolve(__dirname,'tution','build', 'index.html'))
-//   })
-// }
 
 app.get('/logo.svg',(req,res)=>{
  
   res.sendFile(path.join(__dirname,'logo.svg'))
 })
+
 
 //Connecting the app
 const port = process.env.PORT || 5000;

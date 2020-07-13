@@ -27,3 +27,5 @@ router.get("/users", getAllUsers);
 
 //Getting User photo
 router.get("/user/userPhoto/:userId", photoUser);
+
+module.exports = router;
