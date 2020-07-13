@@ -17,15 +17,15 @@ const ClassRoomSchema = new mongoose.Schema({
         contentType: String
     },
     members: [{
-        type: mongoose.Types.ObjectId,
+        type: Object,
         ref: 'User'
     }],
     owner: {
-        type: mongoose.Types.ObjectId,
+        type: Object,
         ref: 'User'
     },
     files: {
-        type: mongoose.Types.ObjectId,
+        type: Object,
         ref: 'Assignment'
     }
 

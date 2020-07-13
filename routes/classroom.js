@@ -3,7 +3,7 @@ var route = express.Router()
 
 const { isAdmin,isSignedIn,isAuthenticated,isTeacher } = require("../controllers/auth")
 const { getUserById } = require("../controllers/user")
-const {getAllClassrooms, getClassroomById, getAClassroom, createClassroom, removeClassroom, updateClassroom, getClasroomPic} = require('../controllers/classroom')
+const {getAllClassrooms, getClassroomById, getAClassroom, createClassroom, removeClassroom, updateClassroom, getClasroomPic, addMembers} = require('../controllers/classroom')
 const router = require('./auth')
 
 
@@ -12,6 +12,9 @@ router.param("classroomId", getClassroomById);
 
 //create classroom
 router.post("/classroom/create", createClassroom);
+
+//add members
+router.post("/classroom/addmembers/:classroomId", addMembers);
 
 // find classrooms
 router.get("/classrooms", getAllClassrooms);

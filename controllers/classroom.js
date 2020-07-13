@@ -1,4 +1,5 @@
 const Classroom = require('../models/Classroom')
+const User = require('../models/user')
 
 exports.getClassroomById = (req, res, next, id) => {
     Classroom.findById(id).exec((err, obj) => {
@@ -13,6 +14,11 @@ exports.getClassroomById = (req, res, next, id) => {
 }
 exports.createClassroom = (req, res) => {
     const classroom = new Classroom(req.body);
+    // User.findById(req.user.id)
+    // .then(user => {
+    //     classroom.owner = user;
+    // })
+    // .catch(err => console.log("error while adding owner " + err))
     classroom.save((err, classroom) => {
         if(err || !classroom){
             return res.status(400).json({
@@ -74,4 +80,25 @@ exports.getClasroomPic = (req, res, next) => {
       return res.send(req.doc.image.data);
     }
     next();
+  };
+
+  exports.addMembers = (req,res) => {
+    const classroom = req.Classroom;
+      User.findById(req.body.id)
+      .then(user => {
+        if (
+            classroom.members.filter(
+              members => members.id.toString() === req.body.id.toString()
+            ).length > 0
+          ) {
+            return res.status(400).json({ error: "Member already exists" });
+          }
+            classroom.members.unshift(user);
+        console.log(user)
+            classroom
+              .save()
+              .then(classroom => res.json(classroom))
+              .catch(err => console.log(err));
+      })
+      .catch(err => console.log(err))
   };
