@@ -7,8 +7,9 @@ const razorpay = new Razorpay({
     key_secret: 'ByGo60MG3CPO4wW93fnZ3NqO',
   });
  exports.paymentProcess = async (req,res)=>{
+   console.log(req.body,"uffff")
     const payment_capture = 1
-    const amount = 500
+    const amount = req.body.amt
     const currency ='INR'
   
     const options = {
@@ -19,17 +20,15 @@ const razorpay = new Razorpay({
       }
     try{
     const response = await razorpay.orders.create(options)
-    console.log("hi")
-    console.log(response)
+    // console.log("hi")
+    // console.log(response)
     res.json({
       id: response.id,
       currency: response.currency,
       amount: response.amount
       })
     }
-    catch{
-      err => console.log(err)
-    }
+    catch{err => console.log(err,"errerr")}
   }
   
  exports.paymentVerification = (req,res)=>{

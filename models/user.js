@@ -14,10 +14,22 @@ const userSchema = new mongoose.Schema(
       type: mongoose.Types.ObjectId,
       ref: 'Class'
     }],
-    subject: [{
-      type: mongoose.Types.ObjectId,
-      ref: 'Subject'
-    }],
+    physics: {
+    type: Number,
+    default: 0
+    },
+    chemistry: {
+        type: Number,
+        default: 0
+    },
+    maths: {
+        type: Number,
+        default: 0
+    },
+    biology: {
+        type: Number,
+        default: 0
+    },
     email: {
       type: String,
       required: true,
@@ -38,7 +50,7 @@ const userSchema = new mongoose.Schema(
     //Salt for Passwords
     salt: String, //defined in virtuals
     //Defining Roles
-    role: {
+    role:{
       type: Number, //Higher the number higher the priviledges
       default: 0,
     },

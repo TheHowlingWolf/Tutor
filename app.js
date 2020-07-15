@@ -13,6 +13,8 @@ const classRoutes = require("./routes/class");
 const paymentRoutes = require("./routes/payment");
 const noticeRoutes = require("./routes/notice");
 const userRoutes = require("./routes/user");
+const classroomRoutes = require("./routes/classroom");
+const path = require('path')
 
 //Connecting Mongoose-mongodb
 mongoose
@@ -41,6 +43,7 @@ app.use("/api", classRoutes);
 app.use("/api", paymentRoutes);
 app.use("/api", noticeRoutes);
 app.use("/api", userRoutes);
+app.use("/api", classroomRoutes)
 
 
 app.get('/logo.svg',(req,res)=>{

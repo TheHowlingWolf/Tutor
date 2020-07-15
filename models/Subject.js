@@ -8,10 +8,7 @@ const SubjectSchema = new mongoose.Schema({
     price: {
         type: Number
     },
-    paymentStatus: {
-        type: Number,
-        default: 0
-    }
+    
 })
 
 module.exports = mongoose.model("Subject", SubjectSchema);

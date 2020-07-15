@@ -1,4 +1,4 @@
-const ClassO = require("../models/class");
+const ClassO = require("../models/Class");
 
 exports.getClassById = (req, res, next, id) => {
     ClassO.findById(id).exec((err, obj)=>{     

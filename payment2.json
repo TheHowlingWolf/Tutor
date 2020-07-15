@@ -8,36 +8,47 @@
     "payload": {
         "payment": {
             "entity": {
-                "id": "pay_FDUKlQClmZinL5",
+                "id": "pay_FEkcRfUUGAjLpe",
                 "entity": "payment",
-                "amount": 50000,
+                "amount": 800000,
                 "currency": "INR",
                 "status": "captured",
-                "order_id": "order_FDUJspA8ItR0go",
+                "order_id": "order_FEkbstwOXuicnX",
                 "invoice_id": null,
                 "international": false,
-                "method": "wallet",
+                "method": "card",
                 "amount_refunded": 0,
                 "refund_status": null,
                 "captured": true,
                 "description": "Thanks for enrolling with the best!",
-                "card_id": null,
+                "card_id": "card_FEkcRkWjyGmcsH",
+                "card": {
+                    "id": "card_FEkcRkWjyGmcsH",
+                    "entity": "card",
+                    "name": "Anshika Pranzal",
+                    "last4": "1111",
+                    "network": "Visa",
+                    "type": "debit",
+                    "issuer": null,
+                    "international": false,
+                    "emi": false
+                },
                 "bank": null,
-                "wallet": "payzapp",
+                "wallet": null,
                 "vpa": null,
                 "email": "182@q.com",
-                "contact": "+919431197050",
+                "contact": "+91444444444444",
                 "notes": [],
-                "fee": 1180,
-                "tax": 180,
+                "fee": 18880,
+                "tax": 2880,
                 "error_code": null,
                 "error_description": null,
                 "error_source": null,
                 "error_step": null,
                 "error_reason": null,
-                "created_at": 1594535947
+                "created_at": 1594811637
             }
         }
     },
-    "created_at": 1594535961
+    "created_at": 1594811640
 }
