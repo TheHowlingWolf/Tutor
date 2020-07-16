@@ -18,7 +18,7 @@ router.post("/classroom/addmembers/:classroomId", addMembers);
 
 // find classrooms
 router.get("/classrooms", getAllClassrooms);
-router.get("/classroom/:clasroomId", getAClassroom);
+router.get("/classroom/:classroomId", getAClassroom);
 
 //delete classroom
 router.delete("/classroom/delete/:classroomId", removeClassroom);
@@ -27,6 +27,6 @@ router.delete("/classroom/delete/:classroomId", removeClassroom);
 router.put("/classroom/update/:classroomId", updateClassroom);
 
 //get classroom image
-router.get("/classroom/classroomimge/:classroomId", getClasroomPic);
+router.get("/classroom/classroomimg/:classroomId", getClasroomPic);
 
 module.exports = router;

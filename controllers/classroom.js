@@ -41,7 +41,9 @@ exports.getAllClassrooms = (req, res) => {
 }
 
 exports.getAClassroom = (req,res) => {
-    res.json(req.classroom)
+    const classroom= req.Classroom;
+    console.log(classroom)
+    res.json(classroom)
 }
 
 exports.removeClassroom = (req,res) => {
@@ -61,6 +63,7 @@ exports.removeClassroom = (req,res) => {
 
 exports.updateClassroom = (req, res) => {
         const classroom = req.Classroom;
+        console.log(classroom)
         classroom.name = req.body.name;
         classroom.description = req.body.description;
         classroom.subject = req.body.subject;
