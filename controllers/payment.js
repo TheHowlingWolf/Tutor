@@ -1,6 +1,7 @@
 const path =require('path')
 const Razorpay = require('razorpay')
 const shortid = require('shortid')
+const Payment = require("../models/Payment");
 
 const razorpay = new Razorpay({
     key_id: 'rzp_test_BauetMNElZ2N7N',
@@ -46,7 +47,7 @@ const razorpay = new Razorpay({
     if (digest === req.headers['x-razorpay-signature']) {
           console.log('request is legit')
           // process it
-
+          
           require('fs').writeFileSync('payment2.json', JSON.stringify(req.body, null, 4))
       } else {
           // pass it

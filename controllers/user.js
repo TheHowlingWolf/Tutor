@@ -8,9 +8,10 @@ exports.getUserById = (req, res, next, id) => {
         error: "No User in found in Database",
       });
     }
+    req.user = user;
+    next();
   });
-  req.user = user;
-  next();
+  
 };
 
 //Selecting one user
@@ -33,7 +34,7 @@ exports.getAllUsers = (req, res, next) => {
   });
 };
 
-//Getting ProfilePic
+//Getting userPic
 exports.photoUser = (req, res, next) => {
   if (req.user.proPic.data) {
     res.set("Content-Type", req.doc.proPic.contentType);
@@ -43,7 +44,8 @@ exports.photoUser = (req, res, next) => {
 };
 
 exports.updatedUser = (req, res) =>{
-  User.findByIdAndUpdate({_id: req.profile._id},
+  console.log("hello")
+  User.findByIdAndUpdate({_id: req.user._id},
       {$set: req.body},
       {new: true,useFindAndModify: false},
       (err,user) => {
@@ -52,10 +54,10 @@ exports.updatedUser = (req, res) =>{
                   error: "Updating not authorized"
               })
           }
-          req.profile.salt = undefined;
-          req.profile.encryptedpassword = undefined;
-          req.profile.createdAt = undefined;
-          req.profile.updatedAt = undefined;
+          req.user.salt = undefined;
+          req.user.encryptedpassword = undefined;
+          req.user.createdAt = undefined;
+          req.user.updatedAt = undefined;
           res.json(user);
       }
       );

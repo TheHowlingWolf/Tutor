@@ -20,7 +20,7 @@ router.param("userId", getUserById);
 router.get("/user/:userId", isSignedIn, getOneUser);
 
 //Updating user
-router.get("/update/:userId", isSignedIn, updatedUser);
+router.put("/update/:userId", isSignedIn, updatedUser);
 
 //Getting All User
 router.get("/users", getAllUsers);

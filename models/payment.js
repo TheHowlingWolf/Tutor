@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const NoticeSchema = new mongoose.Schema({
+const PaymentSchema = new mongoose.Schema({
     accId: {
         type: String,
         required: true
@@ -42,4 +42,4 @@ const NoticeSchema = new mongoose.Schema({
     }
 })
 
-module.exports = mongoose.model("Notice", NoticeSchema);
+module.exports = mongoose.model("Payment", PaymentSchema);
