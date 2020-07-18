@@ -1,21 +1,25 @@
-const mongoose = require('mongoose');
+const mongoose = require('mongoose')
 
-const DocumentSchema = new mongoose.Schema({
-    document: {
-        data: Buffer,
-        contentType: String,
+const AssignmentSchema = new mongoose.Schema({
+    name:{
+        type: String,
         required: true
     },
-    title: {
-        type: String
-    },
-    description :{
-        type: String
-    }
-    },
-    {
-        timestamps: true, //this timestamp records the time of entry in the db
-    }
-    )
 
-module.exports = mongoose.model("Document", DocumentSchema);
+    teacher_file: {
+        type: Buffer,
+        // ContentType: String,
+        required: true
+    },
+    type: {
+        type: Boolean,//true for uploading assignments and false for uploading Notes
+        // required: true
+    },
+    student_file: [{
+        data:Buffer
+    }],
+    date: {
+        type:Date
+    }
+})
+module.exports = mongoose.model("Assignment",AssignmentSchema);
