@@ -47,8 +47,27 @@ const razorpay = new Razorpay({
     if (digest === req.headers['x-razorpay-signature']) {
           console.log('request is legit')
           // process it
-          
-          require('fs').writeFileSync('payment2.json', JSON.stringify(req.body, null, 4))
+          const payment = new Payment;
+          payment.accId = req.body.account_id;
+          payment.paymentId = req.body.payload.payment.entity.id;
+          payment.orderId = req.body.payload.payment.entity.order_id;
+          payment.cardId = req.body.payload.payment.entity.card_id;
+          payment.upiId = req.body.payload.payment.entity.vpa;
+          payment.bankName = req.body.payload.payment.entity.bank;
+          payment.walletName = req.body.payload.payment.entity.wallet;
+          payment.method = req.body.payload.payment.entity.method;
+          payment.email = req.body.payload.payment.entity.email;
+          payment.date = new Date();
+          payment.save((err,payment) => {
+            if(err || !payment){
+                console.log(err)
+                return res.status(400).json({
+                    error: "Please enter all the fields!"
+                })
+            }
+            res.json({payment})
+        })
+          // require('fs').writeFileSync('payment2.json', JSON.stringify(req.body, null, 4))
       } else {
           // pass it
     }
