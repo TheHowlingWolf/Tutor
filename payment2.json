@@ -8,12 +8,12 @@
     "payload": {
         "payment": {
             "entity": {
-                "id": "pay_FFKurudZPXcSna",
+                "id": "pay_FFMU7mHUnS05QJ",
                 "entity": "payment",
-                "amount": 700000,
+                "amount": 50000,
                 "currency": "INR",
                 "status": "captured",
-                "order_id": "order_FFKueF3UDuU5IB",
+                "order_id": "order_FFMTo9XAksCqAY",
                 "invoice_id": null,
                 "international": false,
                 "method": "netbanking",
@@ -22,22 +22,22 @@
                 "captured": true,
                 "description": "Thanks for enrolling with the best!",
                 "card_id": null,
-                "bank": "YESB",
+                "bank": "ICIC",
                 "wallet": null,
                 "vpa": null,
                 "email": "182@q.com",
-                "contact": "+91222222222222",
+                "contact": "+91444444444444",
                 "notes": [],
-                "fee": 16520,
-                "tax": 2520,
+                "fee": 1180,
+                "tax": 180,
                 "error_code": null,
                 "error_description": null,
                 "error_source": null,
                 "error_step": null,
                 "error_reason": null,
-                "created_at": 1594939462
+                "created_at": 1594944986
             }
         }
     },
-    "created_at": 1594939472
+    "created_at": 1594944991
 }

@@ -10,6 +10,10 @@ const userSchema = new mongoose.Schema(
       maxlength: 32,
       trim: true,
     },
+    standard: {
+      type: String,
+      required: true
+    },
     class: [{
       type: mongoose.Types.ObjectId,
       ref: 'Class'
