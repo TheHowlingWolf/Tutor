@@ -4,6 +4,8 @@ const mongoose = require("mongoose");
 const express = require("express");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
+const fileUpload = require('express-fileupload');
+const fs = require('fs');
 const cors = require("cors");
 const app = express();
 //My Routes
@@ -14,6 +16,7 @@ const paymentRoutes = require("./routes/payment");
 const noticeRoutes = require("./routes/notice");
 const userRoutes = require("./routes/user");
 const classroomRoutes = require("./routes/classroom");
+const documentRoutes = require("./routes/document");
 const path = require('path')
 
 //Connecting Mongoose-mongodb
@@ -35,6 +38,9 @@ mongoose
 app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(cors());
+app.use(fileUpload());
+
+
 
 //My routes
 app.use("/api", authRoutes);
@@ -43,7 +49,8 @@ app.use("/api", classRoutes);
 app.use("/api", paymentRoutes);
 app.use("/api", noticeRoutes);
 app.use("/api", userRoutes);
-app.use("/api", classroomRoutes)
+app.use("/api", classroomRoutes);
+app.use("/api", documentRoutes);
 
 
 app.get('/logo.svg',(req,res)=>{
