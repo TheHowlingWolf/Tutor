@@ -17,7 +17,9 @@ exports.getDocumentById = (req, res, next, id) => {
 
 exports.uploadDocument = (req,res) =>{
     var documentO = new DocumentO;
-    if(req.files){
+    console.log("Upload doc",req.body)
+
+    if(req.body.files){
         console.log(req.files.file.name)
         var doc = req.files.file, 
         docname = doc.name;

@@ -1,8 +1,6 @@
 const Subject = require("../models/Subject")
 
 
-
-
 exports.addSubject = (req, res) => {
     const subject = new Subject({
         name: req.body.name
