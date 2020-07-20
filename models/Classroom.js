@@ -24,9 +24,8 @@ const ClassRoomSchema = new mongoose.Schema({
         type: Object,
         ref: 'User'
     },
-    files: {
-        type: Object,
-        ref: 'Assignment'
+    doc:{
+        data: Object
     }
 
 })

@@ -3,7 +3,7 @@ var route = express.Router()
 
 const { isAdmin,isSignedIn,isAuthenticated,isTeacher } = require("../controllers/auth")
 const { getUserById } = require("../controllers/user")
-const {getAllClassrooms, getClassroomById, getAClassroom, createClassroom, removeClassroom, updateClassroom, getClasroomPic, addMembers} = require('../controllers/classroom')
+const {uploadDocument2,getAllClassrooms, getClassroomById, getAClassroom, createClassroom, removeClassroom, updateClassroom, getClasroomPic, addMembers} = require('../controllers/classroom')
 const router = require('./auth')
 
 
@@ -28,5 +28,8 @@ router.put("/classroom/update/:classroomId", updateClassroom);
 
 //get classroom image
 router.get("/classroom/classroomimg/:classroomId", getClasroomPic);
+
+//upload assignment
+router.put("/classroom/:classroomId/upload/document", uploadDocument2)
 
 module.exports = router;
