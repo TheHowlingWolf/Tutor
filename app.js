@@ -4,7 +4,6 @@ const mongoose = require("mongoose");
 const express = require("express");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
-const fileUpload = require('express-fileupload');
 const fs = require('fs');
 const cors = require("cors");
 const app = express();
@@ -38,7 +37,6 @@ mongoose
 app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(cors());
-app.use(fileUpload());
 
 
 

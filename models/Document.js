@@ -1,25 +1,25 @@
 const mongoose = require('mongoose')
 
 const AssignmentSchema = new mongoose.Schema({
+    
+    photo: {
+        data: Buffer,
+        contentType: String
+    },
     name:{
-        type: String,
-        required: true
+        type: String
     },
 
-    teacher_file: {
-        type: Buffer,
-        // ContentType: String,
-        required: true
-    },
     type: {
-        type: Boolean,//true for uploading assignments and false for uploading Notes
+        type: String,//true for uploading assignments and false for uploading Notes
         // required: true
     },
-    student_file: [{
-        data:Buffer
-    }],
-    date: {
-        type:Date
-    }
+    // student_file: [{
+    //     data: Buffer,
+    //     contentType: String
+    // }],
+    // date: {
+    //     type:Date
+    // }
 })
 module.exports = mongoose.model("Assignment",AssignmentSchema);

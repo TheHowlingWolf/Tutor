@@ -1,5 +1,5 @@
 const Mongoose = require("mongoose");
-const QuizQuestions = require("./QuizQuestions");
+const Question = require("./QuizQuestions");
 
 const quizSchema = new Mongoose.Schema({
   title: {
@@ -13,6 +13,7 @@ const quizSchema = new Mongoose.Schema({
     ref: "Subject"
   },
   questions: [{ type: Mongoose.Schema.Types.ObjectId, ref: 'Question' }],
+  responses: [{ type: Mongoose.Schema.Types.ObjectId, ref: 'Question' }],
   time: { type: Number }
 });
 

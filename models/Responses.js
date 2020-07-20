@@ -3,27 +3,30 @@
 const mongoose = require('mongoose');
 
 const ResponseSchema = new mongoose.Schema({
-    quiz: {
-        type: mongoose.Types.ObjectId,
-        ref: 'Quiz',
-        required: true
-    },
-    questions: {
-        type: mongoose.Types.ObjectId,
-        ref: 'Question',
-        required: true
-    },
-    responseOption: {
+    // quiz: {
+    //     type: mongoose.Types.ObjectId,
+    //     ref: 'Quiz',
+    //     required: true
+    // },
+    // questions: {
+    //     type: mongoose.Types.ObjectId,
+    //     ref: 'Question',
+    //     required: true
+    // },
+    responseOption: [{
         type: mongoose.Types.ObjectId,
         ref: 'AnswerOption',
         required: true
-    },
+    }],
     student: {
         type: mongoose.Types.ObjectId,
         ref: 'user',
         required: true
     },
-    totalMarks:{}
+    totalMarks:{
+        type: Number,
+        default: 0
+    }
 })
 
 
