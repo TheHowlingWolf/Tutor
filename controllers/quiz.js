@@ -32,7 +32,7 @@ exports.createQuiz = (req, res) => {
         subject: req.body.subject,
         endTime: req.body.endTime,
         start: req.body.start,
-        teacher: req.body.teacher
+        // teacher: req.body.teacher
     });
 
     quiz.save().then(quiz => {
