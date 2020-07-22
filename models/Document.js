@@ -9,7 +9,9 @@ const AssignmentSchema = new mongoose.Schema({
     name:{
         type: String
     },
-
+    student:{
+        type: String
+    },
     type: {
         type: String,//true for uploading assignments and false for uploading Notes
         // required: true
