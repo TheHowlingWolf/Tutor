@@ -1,5 +1,6 @@
 const Classroom = require('../models/Classroom')
 const DocumentO = require('../models/Document');
+const AssignmentO = require('../models/Assignment');
 const User = require('../models/user')
 const path = require('path');
 const formidable = require('formidable')
@@ -142,7 +143,6 @@ exports.getClasroomPic = (req, res, next) => {
         //handle files here 
         let product = new DocumentO(fields);
         const classroom = req.Classroom;
-        console.log(product)
         if(files.photo){
         if(files.photo.size >30000000 ) //30mb
         {
@@ -152,15 +152,67 @@ exports.getClasroomPic = (req, res, next) => {
         }
         product.photo.data = fs.readFileSync(files.photo.path);
         product.photo.contentType = files.photo.type;
+        product.name = fields.name;
+        product.date = Date.now();
     }
-    classroom.doc = product;
-    classroom.save((err,classroom) => {
+    product.save((err,product) => {
         if(err){
             return res.status(400).json({
-                error: err + " Document not uploaded"
+                error: err + "Document not saved"
             })
         }
-        res.json({classroom})
+        classroom.doc.unshift(product);
+            classroom
+              .save()
+              .then(classroom => res.json(classroom))
+              .catch(err => console.log(err));
+    })
+    });
+}
+
+
+// upload Assignment
+
+exports.uploadAssignment = (req,res) =>{
+    
+    let form = new formidable.IncomingForm();
+    form.keepExtensions = true;
+    form.parse(req, (err,fields,files)=>{
+        console.log("---")
+        if(err){
+            return res.status(400).json({
+                error:  "Document has a problem"
+            })
+        }
+        //destructure the field
+        const {photo} = fields; //basically price=fields.price is executing here.
+    console.log(fields,"f")
+        //handle files here 
+        let product = new AssignmentO(fields);
+        const classroom = req.Classroom;
+        if(files.photo){
+        if(files.photo.size >30000000 ) //30mb
+        {
+            return res.status(400).json({
+                error: "Files size exceeded"
+            })
+        }
+        product.photo.data = fs.readFileSync(files.photo.path);
+        product.photo.contentType = files.photo.type;
+        product.name = fields.name;
+        product.date = Date.now();
+    }
+    product.save((err,product) => {
+        if(err){
+            return res.status(400).json({
+                error: err + "Assignment not saved"
+            })
+        }
+        classroom.assignment.unshift(product);
+            classroom
+              .save()
+              .then(classroom => res.json(classroom))
+              .catch(err => console.log(err));
     })
     });
 }
