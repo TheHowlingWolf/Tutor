@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+const mongoose = require('mongoose')
 
 const AssignmentSchema = new mongoose.Schema({
     
@@ -9,6 +9,10 @@ const AssignmentSchema = new mongoose.Schema({
     name:{
         type: String
     },
+    answers:[{
+        type: Object,
+        ref: 'Document'
+    }],
 
     type: {
         type: String,//true for uploading assignments and false for uploading Notes
@@ -22,4 +26,4 @@ const AssignmentSchema = new mongoose.Schema({
         type:Date
     }
 })
-module.exports = mongoose.model("Document",AssignmentSchema);
+module.exports = mongoose.model("Assignment",AssignmentSchema);
