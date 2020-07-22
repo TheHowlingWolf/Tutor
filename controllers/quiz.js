@@ -10,7 +10,7 @@ exports.getQuizById = (req, res, next, quizid) => {
         next();
     }).catch(err => {
         return res.status(403).json({
-            error: "Error Finding the quiz"
+            error: "Error Finding the quiz"+err
         })
     })
 }
@@ -30,12 +30,13 @@ exports.createQuiz = (req, res) => {
     const quiz = new Quiz({
         title: req.body.title,
         subject: req.body.subject,
-        time: req.body.time
+        endTime: req.body.endTime,
+        start: req.body.start,
+        teacher: req.body.teacher
     });
 
     quiz.save().then(quiz => {
         res.status(200).json({
-
             data: quiz
         });
     });
@@ -133,6 +134,7 @@ exports.createOption = (req, res) => {
 }
 
 exports.getQuiz = (req, res) => {
+    console.log("here")
     Quiz.find().populate({
         path: 'questions', select: "-img", populate: {
             path: "options",
@@ -140,6 +142,14 @@ exports.getQuiz = (req, res) => {
         }
     }).then(quiz => {
         res.status(200).json({ data: quiz })
+    })
+}
+
+exports.getQuizByTeacher = (req, res) => {
+    Quiz.find({
+        teacher: req.user._id
+    }).exec().then(quiz => {
+        res.status(200).json(quiz)
     })
 }
 

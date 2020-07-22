@@ -13,7 +13,7 @@ const ResponseSchema = new mongoose.Schema({
     //     ref: 'Question',
     //     required: true
     // },
-    responseOption: [{
+    response: [{
         type: mongoose.Types.ObjectId,
         ref: 'AnswerOption',
         required: true

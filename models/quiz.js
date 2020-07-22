@@ -1,6 +1,6 @@
 const Mongoose = require("mongoose");
 const Question = require("./QuizQuestions");
-
+const User = require("./user")
 const quizSchema = new Mongoose.Schema({
   title: {
     type: String,
@@ -8,13 +8,25 @@ const quizSchema = new Mongoose.Schema({
     trim: true,
   },
   subject: {
-    type: Mongoose.Schema.ObjectId,
+    type: String,
     required: true,
-    ref: "Subject"
+    // ref: "Subject"
   },
+  endTime: { 
+    type: String,
+    required: true,
+   },
   questions: [{ type: Mongoose.Schema.Types.ObjectId, ref: 'Question' }],
   responses: [{ type: Mongoose.Schema.Types.ObjectId, ref: 'Question' }],
-  time: { type: Number }
+  start: { 
+    type: String,
+    required: true,
+   },
+   teacher:{
+     type: Mongoose.Schema.Types.ObjectId,
+     ref: 'User'
+   }
+  
 });
 
 module.exports = Mongoose.model("Quiz", quizSchema);
