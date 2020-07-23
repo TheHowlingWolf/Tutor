@@ -14,26 +14,30 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true
     },
-    class: [{
+    classRoom: [{
       type: mongoose.Types.ObjectId,
-      ref: 'Class'
+      ref: 'ClassRoom'
     }],
-    physics: {
-    type: Number,
-    default: 0
-    },
-    chemistry: {
-        type: Number,
-        default: 0
-    },
-    maths: {
-        type: Number,
-        default: 0
-    },
-    biology: {
-        type: Number,
-        default: 0
-    },
+    // physics: {
+    // type: Number,
+    // default: 0
+    // },
+    // chemistry: {
+    //     type: Number,
+    //     default: 0
+    // },
+    // maths: {
+    //     type: Number,
+    //     default: 0
+    // },
+    // biology: {
+    //     type: Number,
+    //     default: 0
+    // },
+    subject:[{
+      type: mongoose.Types.ObjectId,
+      ref: 'Subject'
+    }],
     email: {
       type: String,
       required: true,
