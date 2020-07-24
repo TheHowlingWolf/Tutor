@@ -8,6 +8,9 @@ const SubjectSchema = new mongoose.Schema({
     price: {
         type: Number
     },
+    value: {
+        type: Number
+    }
     
 })
 

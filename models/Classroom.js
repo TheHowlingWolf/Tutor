@@ -9,15 +9,19 @@ const ClassRoomSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    subject: {
-        type: String
+    subject:{
+        type: mongoose.Types.ObjectId,
+        ref: 'Subject'
+      },
+    standard:{
+        type: Number
     },
     image: {
         data: Buffer,
         contentType: String
     },
     members: [{
-        type: Object,
+        type:  mongoose.Types.ObjectId,
         ref: 'User'
     }],
     owner: {
