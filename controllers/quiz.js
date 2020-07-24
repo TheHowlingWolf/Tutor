@@ -15,6 +15,10 @@ exports.getQuizById = (req, res, next, quizid) => {
     })
 }
 
+exports.getAQuiz = (req, res) => {
+    return res.status(200).json(req.quiz);
+  };
+
 exports.getQuestionById = (req, res, next, quesId) => {
     QuizQuestions.findById(quesId).then(question => {
         req.question = question;
@@ -43,10 +47,13 @@ exports.createQuiz = (req, res) => {
 }
 
 exports.createQuestion = (req, res) => {
+    console.log("heyy")
     let form = new formidable.IncomingForm();
     form.keepExtensions = true;
 
     form.parse(req, (err, fields, file) => {
+    console.log("heyy inside")
+
         if (err) {
             return res.status(400).json({
                 error: "Cannot Save Question"
@@ -111,14 +118,31 @@ exports.createQuestion = (req, res) => {
 
 }
 
+exports.deleteQuestion = (req,res) =>{
+   
+    Quiz.updateOne(
+        { _id: req.quiz._id },
+        { $pull: { questions: { $in: [ req.question._id ] } } },
+        (err,ques)=>{
+        if(err || !ques){
+            return res.status(400).json({
+                error: "Question not deleted"
+            })
+        }
+        res.json(ques);
+    });
+}
+
 exports.createOption = (req, res) => {
+    console.log("jkk",req.body)
     const option = new AnswerOptions({
         optionValue: req.body.optionValue,
         isCorrect: req.body.isCorrect ? true : false
     });
-
+    console.log(option)
     option.save().then(async option => {
         const pushed = await Promise.resolve(req.question.options.push(option._id));
+        console.log(req.question)
         req.question.save().then(updatedQues => {
             res.status(200).json({ data: option });
         }).catch(err => {

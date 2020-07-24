@@ -12,7 +12,6 @@ const QuestionSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'AnswerOptions'
     }],
-    
     numCorrect: { type: Number, default: 1 },
 
 })
