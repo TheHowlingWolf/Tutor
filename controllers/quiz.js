@@ -30,6 +30,10 @@ exports.getQuestionById = (req, res, next, quesId) => {
     })
 }
 
+exports.getAQuestion = (req, res) =>{
+    return res.status(200).json(req.question);
+}
+
 exports.createQuiz = (req, res) => {
     const quiz = new Quiz({
         title: req.body.title,
@@ -47,28 +51,27 @@ exports.createQuiz = (req, res) => {
 }
 
 exports.createQuestion = (req, res) => {
-    console.log("heyy")
+
     let form = new formidable.IncomingForm();
     form.keepExtensions = true;
 
     form.parse(req, (err, fields, file) => {
-    console.log("heyy inside")
 
         if (err) {
             return res.status(400).json({
                 error: "Cannot Save Question"
             });
         }
-        const { title, numCorrect, } = fields;
+        const { title, numCorrect,hasImg } = fields;
         
-        if (!title) {
+        if (!title && !file.img) {
             return res.status(400).json({
                 error: "Cannot Save Question"
             });
         }
 
         let question = new QuizQuestions({
-            title: title,numCorrect
+            title: title,hasImg:hasImg,numCorrect
         })
         
 
@@ -118,8 +121,55 @@ exports.createQuestion = (req, res) => {
 
 }
 
-exports.deleteQuestion = (req,res) =>{
+exports.updateQuestion = (req, res) => {
+    
+    let form = new formidable.IncomingForm();
+    form.keepExtensions = true;
+
+    form.parse(req, (err, fields, file) => {
+    
+
+        if (err) {
+            return res.status(400).json({
+                error: "Cannot Save Question"
+            });
+        }
+        const { title, numCorrect, } = fields;
+        
+
+        let question = req.question
+        question.title = title
+
+        if (file.img) {
+            if (file.img.size > 2097152) //1048576 = 2*1024*1024 i.e 1mb limit
+            {
+                return res.status(413).json({
+                    error: "File size too big"
+                });
+            }
+
+            else {
+
+                question.img.data = fs.readFileSync(file.img.path);
+                question.img.contentType = file.img.type;
+            }
+        }
    
+        //Save to db
+        question.save().then(async ques => {
+            //Push the question the the quiz list using promise to synchronise it
+
+            return res.json(ques)
+        }).catch(err => {
+            // question.save Catch Block
+            console.log(" Question save", err);
+            res.status(403).json({ error: "Cannot Save Question" });
+        });
+    });
+
+}
+
+exports.deleteQuestion = (req,res) =>{
     Quiz.updateOne(
         { _id: req.quiz._id },
         { $pull: { questions: { $in: [ req.question._id ] } } },
@@ -133,13 +183,13 @@ exports.deleteQuestion = (req,res) =>{
     });
 }
 
+
 exports.createOption = (req, res) => {
-    console.log("jkk",req.body)
+
     const option = new AnswerOptions({
         optionValue: req.body.optionValue,
         isCorrect: req.body.isCorrect ? true : false
     });
-    console.log(option)
     option.save().then(async option => {
         const pushed = await Promise.resolve(req.question.options.push(option._id));
         console.log(req.question)
@@ -157,9 +207,18 @@ exports.createOption = (req, res) => {
     })
 }
 
+exports.img = (req,res,next) => {
+    
+    if(req.question.img.data){
+        res.set("Content-Type",req.question.img.contentType)
+        return res.send(req.question.img.data);
+    }
+    next();
+};
+
 exports.getQuiz = (req, res) => {
-    console.log("here")
-    Quiz.find().populate({
+    
+    Quiz.find().select("-img").populate({
         path: 'questions', select: "-img", populate: {
             path: "options",
             model: "AnswerOption"
