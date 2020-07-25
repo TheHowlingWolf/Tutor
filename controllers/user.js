@@ -12,7 +12,6 @@ exports.getUserById = (req, res, next, id) => {
     req.user = user;
     next();
   });
-  
 };
 
 //Selecting one user
