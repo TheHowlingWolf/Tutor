@@ -6,7 +6,8 @@ const {
   getOneUser,
   getAllUsers,
   photoUser,
-  updatedUser
+  updatedUser,
+  addSubjects
 } = require("../controllers/user");
 
 const { isAdmin, isAuthenticated, isSignedIn } = require("../controllers/auth");
@@ -27,5 +28,8 @@ router.get("/users", getAllUsers);
 
 //Getting User photo
 router.get("/user/userPhoto/:userId", photoUser);
+
+//Adding/Enrolling Subject
+router.put("/user/addSubject", addSubjects);
 
 module.exports = router;

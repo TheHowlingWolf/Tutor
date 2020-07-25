@@ -1,4 +1,5 @@
 const User = require("../models/user");
+const Subject = require("../models/Subject");
 
 //finding user
 exports.getUserById = (req, res, next, id) => {
@@ -55,10 +56,60 @@ exports.updatedUser = (req, res) =>{
               })
           }
           req.user.salt = undefined;
-          req.user.encryptedpassword = undefined;
+          req.user.encry_password = undefined;
           req.user.createdAt = undefined;
           req.user.updatedAt = undefined;
           res.json(user);
       }
       );
+}
+
+// send a json like {
+//   subject_id:"hsddhkjsbkjjasdbhjadsb",
+//   user_id:"bkjasbjsbajhbjhds"
+// }
+exports.addSubjects = (req, res) =>{
+  Subject.findById(req.body.subject_id)
+  .then( subject => {
+  User.findById(req.body.user_id)
+  .then(user =>{
+    console.log(user)
+    if(user.subject.filter(
+      subjects => subjects._id.toString() === subject._id.toString()
+    ).length > 0){
+      // user.subject.findById(req.body.subject_id)
+      // .then(subjects => subjects.value = req.body.value)
+      // .catch(err => console.log("error in changing value "+err))
+      user.subject.map((obj,i) => {
+        if(obj._id.toString() === subject._id.toString())
+        {
+          obj.value = req.body.value;
+        }
+      })
+    }else{
+    user.subject.unshift(subject);}
+    console.log(user)
+    // user.save()
+    // .then(saved => res.json(saved))
+    // .catch(err => console.log("subject not added to user "+err))
+    User.findByIdAndUpdate({_id: req.body.user_id},
+      {$set: user},
+      {new: true,useFindAndModify: false},
+      (err,user) => {
+          if(err){
+              return res.status(400).json({
+                  error: "Updating not authorized"
+              })
+          }
+          user.salt = undefined;
+          user.encry_password = undefined;
+          user.createdAt = undefined;
+          user.updatedAt = undefined;
+          res.json(user);
+      }
+      );
+  })
+  .catch(err => console.log("User not found "+err))
+})
+.catch(err => console.log("Subject not found "+ err))
 }

@@ -35,8 +35,9 @@ const userSchema = new mongoose.Schema(
     //     default: 0
     // },
     subject:[{
-      type: mongoose.Types.ObjectId,
-      ref: 'Subject'
+      type: Object
+      // type: mongoose.Types.ObjectId,
+      // ref: 'Subject'
     }],
     email: {
       type: String,
