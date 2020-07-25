@@ -87,6 +87,8 @@ exports.addSubjects = (req, res) =>{
         }
       })
     }else{
+      if(req.body.value !== 0){
+      subject.value = req.body.value;}
     user.subject.unshift(subject);}
     console.log(user)
     // user.save()
