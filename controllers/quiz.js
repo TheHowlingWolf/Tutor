@@ -1,5 +1,6 @@
 const Quiz = require("../models/Quiz");
 const QuizQuestions = require("../models/QuizQuestions");
+const Response = require("../models/Responses");
 const formidable = require('formidable');
 const AnswerOptions = require("../models/AnswerOptions");
 const fs = require('fs');
@@ -16,7 +17,17 @@ exports.getQuizById = (req, res, next, quizid) => {
 }
 
 exports.getAQuiz = (req, res) => {
-    return res.status(200).json(req.quiz);
+    Quiz.find({
+        _id: req.quiz._id
+    }).select("-img").populate({
+        path: 'questions', select: "-img", populate: {
+            path: "options",
+            model: "AnswerOption"
+        }
+    }).then(quiz => {
+        res.status(200).json({ data: quiz })
+    })
+    // return res.status(200).json(req.quiz);
   };
 
 exports.getQuestionById = (req, res, next, quesId) => {
@@ -40,10 +51,30 @@ exports.createQuiz = (req, res) => {
         subject: req.body.subject,
         endTime: req.body.endTime,
         start: req.body.start,
-        // teacher: req.body.teacher
+        teacher: req.body.teacher
     });
 
     quiz.save().then(quiz => {
+        res.status(200).json({
+            data: quiz
+        });
+    });
+}
+
+exports.createResponse = (req, res) => {
+    console.log(req.body)
+    let option = [];
+    req.body.forEach(resp => {
+        resp.forEach(obj=>{
+            resp.push(obj)
+        })
+        option.push(resp)
+    });
+    const response = new Response({
+        response: option,
+    });
+
+    response.save().then(quiz => {
         res.status(200).json({
             data: quiz
         });

@@ -13,20 +13,20 @@ const ResponseSchema = new mongoose.Schema({
     //     ref: 'Question',
     //     required: true
     // },
-    response: [{
+    response:[[{
         type: mongoose.Types.ObjectId,
         ref: 'AnswerOption',
         required: true
-    }],
-    student: {
-        type: mongoose.Types.ObjectId,
-        ref: 'user',
-        required: true
-    },
-    totalMarks:{
-        type: Number,
-        default: 0
-    }
+    }]],    
+    // student: {
+    //     type: mongoose.Types.ObjectId,
+    //     ref: 'user',
+    //     required: true
+    // },
+    // totalMarks:{
+    //     type: Number,
+    //     default: 0
+    // }
 })
 
 
