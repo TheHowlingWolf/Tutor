@@ -62,7 +62,7 @@ exports.createQuiz = (req, res) => {
 }
 
 exports.createResponse = (req, res) => {
-    console.log(req.body)
+    console.log("hereeeeeeeeeeeeee "+req.body)
     let option = [];
     req.body.forEach(resp => {
         resp.forEach(obj=>{
