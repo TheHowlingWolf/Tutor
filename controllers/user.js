@@ -1,5 +1,7 @@
 const User = require("../models/user");
 const Subject = require("../models/Subject");
+const Classroom = require('../models/Classroom');
+const Class = require('../models/Class');
 
 //finding user
 exports.getUserById = (req, res, next, id) => {
@@ -113,4 +115,81 @@ exports.addSubjects = (req, res) =>{
   .catch(err => console.log("User not found "+err))
 })
 .catch(err => console.log("Subject not found "+ err))
+}
+
+exports.studentClassrooms = (req,res) => {
+  const subclass = []
+  console.log(req.body)
+  User.findById(req.body.user_id).exec((err, user) => {
+    if (err || !user) {
+      return res.status(400).json({
+        error: "No User is found in Database",
+      });
+    }
+    const userO = user;
+
+  Classroom.find().exec((err, cat) => {
+    if(err || !cat){
+        return res.status(400).json({
+            error: "Classrooms Do Not Exist"
+        })
+    }
+    cat.map((obj, i) => {
+      userO.subject.map((o,i)=>{
+        if((obj.subject.toString() === o._id.toString())&&(o.value !== 0)
+        // &&(o.standard === obj.standard.toString())
+        ){
+          subclass.unshift(obj)
+          
+          if (
+            (obj.members.filter(
+              member => member.toString() === userO._id.toString()
+            ).length === 0)||(obj.members.length === 0)
+          ) {
+            console.log("hi");
+            obj.members.unshift(userO._id);
+                obj
+                  .save()
+          }
+        }
+      })
+    })
+    res.json(subclass);
+})
+}
+)
+
+}
+
+exports.studentClasses = (req,res) => {
+  const subclass = []
+  console.log(req.body)
+  User.findById(req.body.user_id).exec((err, user) => {
+    if (err || !user) {
+      return res.status(400).json({
+        error: "No User is found in Database",
+      });
+    }
+    const userO = user;
+
+  Class.find().exec((err, cat) => {
+    if(err || !cat){
+        return res.status(400).json({
+            error: "Classes Do Not Exist"
+        })
+    }
+    cat.map((obj, i) => {
+      userO.subject.map((o,i)=>{
+        if((obj.subject.toString() === o._id.toString())&&(o.value !== 0)
+        // &&(o.standard === obj.standard.toString())
+        ){
+          subclass.unshift(obj)
+        }
+      })
+    })
+    res.json(subclass);
+})
+}
+)
+
 }

@@ -7,7 +7,9 @@ const {
   getAllUsers,
   photoUser,
   updatedUser,
-  addSubjects
+  addSubjects,
+  studentClassrooms,
+  studentClasses
 } = require("../controllers/user");
 
 const { isAdmin, isAuthenticated, isSignedIn } = require("../controllers/auth");
@@ -31,5 +33,11 @@ router.get("/user/userPhoto/:userId", photoUser);
 
 //Adding/Enrolling Subject
 router.put("/user/addSubject", addSubjects);
+
+//getting classrooms of the subscribed subjects
+router.post("/user/subclassrooms", studentClassrooms);
+
+//getting classrooms of the subscribed subjects
+router.post("/user/subclasses", studentClasses);
 
 module.exports = router;

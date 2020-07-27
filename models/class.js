@@ -15,9 +15,11 @@ const ClassSchema = new mongoose.Schema({
         // required: true
     },
     subject: {
-        type: String,
-        required: true
+        type: String
     },
+    subjectname:{
+        type: String
+      },
     standard:{
         type: String,
         required: true

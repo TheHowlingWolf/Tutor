@@ -21,6 +21,7 @@ exports.getClassroomById = (req, res, next, id) => {
 }
 exports.createClassroom = (req, res) => {
     const classroom = new Classroom(req.body);
+    
     // User.findById(req.user.id)
     // .then(user => {
     //     classroom.owner = user;
@@ -43,6 +44,7 @@ exports.getAllClassrooms = (req, res) => {
                 error: "Classrooms Do Not Exist"
             })
         }
+        console.log(cat)
         res.json(cat)
     })
 }

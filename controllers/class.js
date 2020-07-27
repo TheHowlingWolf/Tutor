@@ -13,6 +13,7 @@ exports.getClassById = (req, res, next, id) => {
     })
 }
 exports.createClass = (req,res) =>{
+    console.log(req)
     const classO = new ClassO(req.body);
     classO.save((err,classO) => {
         if(err || !classO){
@@ -66,7 +67,6 @@ exports.createClass = (req,res) =>{
         classO.standard = req.body.standard;
         classO.time = req.body.time;
         classO.date = req.body.date;
-    
         classO.save((err,updatedclassO) => {
             if(err || !updatedclassO){
                 return res.status(400).json({
