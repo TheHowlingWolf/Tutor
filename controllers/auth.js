@@ -32,7 +32,7 @@ exports.signup = (req, res) => {
       return res.status(400).json({
         //passing this json to craft a error mesg in front end
         error:
-          "The email or mobile is already registered with us, Please try again!",
+          "The email or mobile is already registered with us, Please try again!"+err,
       });
     }
     res.json({
