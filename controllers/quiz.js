@@ -62,16 +62,15 @@ exports.createQuiz = (req, res) => {
 }
 
 exports.createResponse = (req, res) => {
-    console.log("hereeeeeeeeeeeeee "+req.body)
     let option = [];
-    req.body.forEach(resp => {
-        resp.forEach(obj=>{
-            resp.push(obj)
-        })
+    req.body.cSelected.forEach(resp => {
         option.push(resp)
     });
     const response = new Response({
         response: option,
+        quizId: req.body.quiz._id,
+        student: req.body.user._id,
+        totalMarks: req.body.totalMarks
     });
 
     response.save().then(quiz => {
