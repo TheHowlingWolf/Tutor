@@ -10,8 +10,7 @@ const ClassRoomSchema = new mongoose.Schema({
         required: true
     },
     subject:{
-        type: mongoose.Types.ObjectId,
-        ref: 'Subject'
+        type: String
       },
     standard:{
         type: Number

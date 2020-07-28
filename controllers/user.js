@@ -136,7 +136,8 @@ exports.studentClassrooms = (req,res) => {
     }
     cat.map((obj, i) => {
       userO.subject.map((o,i)=>{
-        if((obj.subject.toString() === o._id.toString())&&((parseInt(o.value) !== 0))
+        if(o.name === undefined){o.name = "wrong"}
+        if((obj.subject.toString() === o.name.toString())&&((parseInt(o.value) !== 0))
         // &&(o.standard === obj.standard.toString())
         ){
           subclass.unshift(obj)
