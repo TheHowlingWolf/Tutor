@@ -9,10 +9,13 @@ const AssignmentSchema = new mongoose.Schema({
     name:{
         type: String
     },
-    answers:[{
-        type: Object,
-        ref: 'Document'
-    }],
+    uploader:{
+        type: String
+    },
+    // answers:[{
+    //     type: Object,
+    //     ref: 'Document'
+    // }],
 
     type: {
         type: String,//true for uploading assignments and false for uploading Notes
