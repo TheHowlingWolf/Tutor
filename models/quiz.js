@@ -13,18 +13,20 @@ const quizSchema = new Mongoose.Schema({
     // ref: "Subject"
   },
   endTime: { 
-    type: String,
-    required: true,
+    type: String
    },
   questions: [{ type: Mongoose.Schema.Types.ObjectId, ref: 'Question' }],
   responses: [{ type: Mongoose.Schema.Types.ObjectId, ref: 'Question' }],
   start: { 
-    type: String,
-    required: true,
+    type: String
    },
    teacher:{
      type: Mongoose.Schema.Types.ObjectId,
      ref: 'User'
+   },
+   duration: {
+     type: Number,
+     required: true
    }
   
 });

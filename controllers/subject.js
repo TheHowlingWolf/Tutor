@@ -5,7 +5,7 @@ exports.getSubjectById = (req, res, next, id) => {
         if(err || !sub)
         {
             return res.status(400).json({
-                error: "No such Subject exists"
+                error: "No such Subject exists"+err
             })
         }
         req.subject = sub;
@@ -45,7 +45,7 @@ exports.getASubject = (req,res) =>{
 }
 
 exports.removeSubject = (req,res) =>{
-    console.log("hi")
+    // console.log("hi")
     const subject = req.subject;
     console.log(req.subject);
     subject.remove((err,sub)=>{
