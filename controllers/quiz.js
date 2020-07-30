@@ -344,5 +344,4 @@ exports.getQuizByTeacher = (req, res) => {
     })
 }
 
-exports.getAllQuiz = ()=>{}
 
