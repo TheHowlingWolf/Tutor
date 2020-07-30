@@ -79,6 +79,7 @@ exports.createQuiz = (req, res) => {
     const quiz = new Quiz({
         title: req.body.title,
         subject: req.body.subject,
+        standard: req.body.standard,
         endTime: req.body.endTime,
         start: req.body.start,
         teacher: req.body.teacher,
@@ -97,6 +98,7 @@ exports.updateQuiz = (req, res) => {
 
         quiz.title= req.body.title,
         quiz.subject= req.body.subject,
+        quiz.standard= req.body.standard,
         quiz.endTime= req.body.endTime,
         quiz.start= req.body.start,
         quiz.teacher= req.body.teacher,
