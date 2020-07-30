@@ -3,12 +3,15 @@ var route = express.Router()
 
 const { isAdmin,isSignedIn,isAuthenticated,isTeacher } = require("../controllers/auth")
 const { getUserById } = require("../controllers/user")
-const {uploadDocument2,getAllClassrooms, getClassroomById, getAClassroom, createClassroom, removeClassroom, updateClassroom, getClasroomPic, addMembers, uploadAssignment, uploadAnswer} = require('../controllers/classroom')
+const {uploadDocument2,getAllClassrooms,getDocumentById,getAnswerById,getAssignmentById getClassroomById, getAClassroom, createClassroom, removeClassroom, updateClassroom, getClasroomPic, addMembers, uploadAssignment, uploadAnswer} = require('../controllers/classroom')
 const router = require('./auth')
 
 
 //get classroomId
 router.param("classroomId", getClassroomById);
+router.param("documentId", getDocumentById);
+router.param("assignmentId", getAssignmentById);
+router.param("answerId", getAnswerById);
 
 //create classroom
 router.post("/classroom/create", createClassroom);

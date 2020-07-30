@@ -138,7 +138,7 @@ exports.studentClassrooms = (req,res) => {
       userO.subject.map((o,i)=>{
         if(o.name === undefined){o.name = "wrong"}
         if((obj.subject.toString() === o.name.toString())&&((parseInt(o.value) !== 0))
-        // &&(o.standard === obj.standard.toString())
+        &&(userO.standard.toString() === obj.standard.toString())
         ){
           subclass.unshift(obj)
           
@@ -184,7 +184,7 @@ exports.studentClasses = (req,res) => {
       userO.subject.map((o,i)=>{
         if(o.name === undefined){o.name = "wrong"}
         if((obj.subject.toString() === o.name.toString())&&((parseInt(o.value) !== 0))
-        // &&(o.standard === obj.standard.toString())
+        &&(userO.standard.toString() === obj.standard.toString())
         ){
           subclass.unshift(obj)
         }

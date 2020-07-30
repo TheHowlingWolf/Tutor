@@ -274,3 +274,41 @@ exports.uploadAnswer = (req,res) =>{
     });
 }
 
+exports.getDocumentById = (req, res, next, id) => {
+    DocumentO.findById(id).exec((err, obj) => {
+        if(err || !obj){
+            console.log(err)
+            return res.status(400).json({
+                error: "No such Class Room exits"
+            })
+        }
+        req.Classroom = obj;
+        next();
+    })
+}
+
+exports.getAssignmentById = (req, res, next, id) => {
+    AssignmentO.findById(id).exec((err, obj) => {
+        if(err || !obj){
+            console.log(err)
+            return res.status(400).json({
+                error: "No such Class Room exits"
+            })
+        }
+        req.Classroom = obj;
+        next();
+    })
+}
+
+exports.getAnswerById = (req, res, next, id) => {
+    AnswerO.findById(id).exec((err, obj) => {
+        if(err || !obj){
+            console.log(err)
+            return res.status(400).json({
+                error: "No such Class Room exits"
+            })
+        }
+        req.Classroom = obj;
+        next();
+    })
+}
