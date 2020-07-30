@@ -19,7 +19,7 @@ exports.addSubject = (req, res) => {
     subject.save().then(sub => {
         res.json({sub})
     }).catch(err => {
-        console.log("Error addSubject", err);
+        
         res.status(403).json({
             success: false,
             message: "Cannot Add Subject"
@@ -40,14 +40,12 @@ exports.getAllSubjects = (req, res) => {
 }
 
 exports.getASubject = (req,res) =>{
-    console.log(req.subject);
     return res.json(req.subject);
 }
 
 exports.removeSubject = (req,res) =>{
-    // console.log("hi")
     const subject = req.subject;
-    console.log(req.subject);
+    
     subject.remove((err,sub)=>{
         if(err){
             return res.status(400).json({

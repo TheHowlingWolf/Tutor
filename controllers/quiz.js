@@ -25,7 +25,6 @@ exports.getAQuiz = (req, res) => {
             model: "AnswerOption"
         }
     }).then(quiz => {
-        console.log(quiz)
         res.status(200).json({ data: quiz })
     })
     // return res.status(200).json(req.quiz);
@@ -58,18 +57,22 @@ exports.getQuestionById = (req, res, next, quesId) => {
 }
 
 exports.getOptionById = (req, res, next, optionId) => {
-    AnswerOptions.findById(optionId).then(question => {
+    AnswerOptions.findById(optionId).then(option => {
         req.option = option;
         next();
     }).catch(err => {
         return res.status(403).json({
-            error: "Error Finding the option"
+            error: "Error Finding the option"+err
         })
     })
 }
 
 exports.getAQuestion = (req, res) =>{
     return res.status(200).json(req.question);
+}
+
+exports.getAOption = (req, res) =>{
+    return res.status(200).json(req.option);
 }
 
 exports.createQuiz = (req, res) => {
@@ -197,7 +200,10 @@ exports.createQuestion = (req, res) => {
 }
 
 exports.updateQuestion = (req, res) => {
-    
+    console.log("^^",req.question)
+    // for (var key of req.body.entries()) {
+    //     console.log(key[0] + ', ' + key[1])
+    // }
     let form = new formidable.IncomingForm();
     form.keepExtensions = true;
 
@@ -233,7 +239,8 @@ exports.updateQuestion = (req, res) => {
         //Save to db
         question.save().then(async ques => {
             //Push the question the the quiz list using promise to synchronise it
-
+            
+            console.log(" Question updated");
             return res.json(ques)
         }).catch(err => {
             // question.save Catch Block
@@ -259,6 +266,7 @@ exports.deleteQuestion = (req,res) =>{
 }
 
 exports.deleteOption = (req,res) =>{
+    console.log("kkkkkkkkkkkk")
     QuizQuestions.updateOne(
         { _id: req.question._id },
         { $pull: { options: { $in: [ req.option._id ] } } },
@@ -297,8 +305,8 @@ exports.createOption = (req, res) => {
 }
 
 exports.updateOption = (req, res) => {
-
-    const option = req.body.option
+    
+    const option = req.option
         option.optionValue= req.body.optionValue,
         option.isCorrect= req.body.isCorrect ? true : false
    
