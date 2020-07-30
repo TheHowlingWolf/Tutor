@@ -10,8 +10,7 @@ const ClassRoomSchema = new mongoose.Schema({
         required: true
     },
     subject:{
-        type: mongoose.Types.ObjectId,
-        ref: 'Subject'
+        type: String
       },
     standard:{
         type: Number
@@ -25,7 +24,7 @@ const ClassRoomSchema = new mongoose.Schema({
         ref: 'User'
     }],
     owner: {
-        type: Object,
+        type: mongoose.Types.ObjectId,
         ref: 'User'
     },
     doc:[{
@@ -35,6 +34,10 @@ const ClassRoomSchema = new mongoose.Schema({
     assignment:[{
         type: Object,
         ref: 'Assignment'
+    }],
+    assignmentanswers:[{
+        type: Object,
+        ref: 'Assignmentanswer'
     }]
 
 })

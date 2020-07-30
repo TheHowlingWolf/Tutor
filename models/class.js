@@ -17,9 +17,10 @@ const ClassSchema = new mongoose.Schema({
     subject: {
         type: String
     },
-    subjectname:{
-        type: String
-      },
+    owner: {
+        type: mongoose.Types.ObjectId,
+        ref: 'User'
+    },
     standard:{
         type: String,
         required: true

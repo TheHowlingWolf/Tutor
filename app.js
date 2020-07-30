@@ -17,6 +17,7 @@ const userRoutes = require("./routes/user");
 const classroomRoutes = require("./routes/classroom");
 const documentRoutes = require("./routes/document");
 const subjectRoutes = require('./routes/subject');
+const standardRoutes = require('./routes/standard');
 const path = require('path')
 
 //Connecting Mongoose-mongodb
@@ -51,6 +52,7 @@ app.use("/api", userRoutes);
 app.use("/api", classroomRoutes);
 app.use("/api", documentRoutes);
 app.use("/api", subjectRoutes);
+app.use("/api", standardRoutes);
 
 
 app.get('/logo.svg',(req,res)=>{
