@@ -97,6 +97,30 @@ exports.getClasroomPic = (req, res, next) => {
     next();
   };
 
+  exports.getDocument = (req, res, next) => {
+    if (req.document.photo.data) {
+      res.set("Content-Type", req.document.photo.contentType);
+      return res.send(req.document.photo.data);
+    }
+    next();
+  };
+
+  exports.getAssignment = (req, res, next) => {
+    if (req.assignment.photo.data) {
+      res.set("Content-Type", req.assignment.photo.contentType);
+      return res.send(req.assignment.photo.data);
+    }
+    next();
+  };
+
+  exports.getAnswer = (req, res, next) => {
+    if (req.answer.photo.data) {
+      res.set("Content-Type", req.answer.photo.contentType);
+      return res.send(req.answer.photo.data);
+    }
+    next();
+  };
+
   exports.addMembers = (req,res) => {
     const classroom = req.Classroom;
       User.findById(req.body.id)
@@ -282,7 +306,7 @@ exports.getDocumentById = (req, res, next, id) => {
                 error: "No such Document exits"
             })
         }
-        req.Classroom = obj;
+        req.document = obj;
         next();
     })
 }
@@ -295,7 +319,7 @@ exports.getAssignmentById = (req, res, next, id) => {
                 error: "No such Document exits"
             })
         }
-        req.Classroom = obj;
+        req.assignment = obj;
         next();
     })
 }
@@ -305,10 +329,10 @@ exports.getAnswerById = (req, res, next, id) => {
         if(err || !obj){
             console.log(err)
             return res.status(400).json({
-                error: "No such Class Room exits"
+                error: "No such Answer exists"
             })
         }
-        req.Classroom = obj;
+        req.answer = obj;
         next();
     })
 }

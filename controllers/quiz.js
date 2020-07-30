@@ -185,10 +185,10 @@ exports.createQuestion = (req, res) => {
 
                     console.log("Quiz Update", err);
                     QuizQuestions.findByIdAndDelete(ques._id).then(data => {
-                        res.status(500).json({ error: "Cannot add question please refresh and try again." });
+                        res.status(500).json({ error: "Cannot add question please refresh and try again."+err });
                     }).catch(err => {
                         console.log(" Question Delete", err);
-                        res.status(500).json({ error: "Cannot add question please refresh and try again." });
+                        res.status(500).json({ error: "Cannot add question please refresh and try again."+err });
                     })
                 })
 
