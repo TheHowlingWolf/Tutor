@@ -16,7 +16,9 @@ const AssignmentSchema = new mongoose.Schema({
     //     type: Object,
     //     ref: 'Document'
     // }],
-
+    submission:{
+        type:String,
+    },
     type: {
         type: String,//true for uploading assignments and false for uploading Notes
         // required: true

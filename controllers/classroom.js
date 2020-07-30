@@ -206,6 +206,7 @@ exports.uploadAssignment = (req,res) =>{
         product.name = fields.name;
         product.date = Date.now();
         product.uploader = fields.username;
+        product.submission = fields.submission;
     }
     product.save((err,product) => {
         if(err){
