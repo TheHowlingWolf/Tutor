@@ -3,7 +3,7 @@ var route = express.Router()
 
 const { isAdmin,isSignedIn,isAuthenticated,isTeacher } = require("../controllers/auth")
 const { getUserById } = require("../controllers/user")
-const {uploadDocument2,getAllClassrooms,getDocumentById,getAnswerById,getAssignmentById getClassroomById, getAClassroom, createClassroom, removeClassroom, updateClassroom, getClasroomPic, addMembers, uploadAssignment, uploadAnswer} = require('../controllers/classroom')
+const {uploadDocument2,getAllClassrooms,getDocumentById,getAnswerById,getAssignmentById, getClassroomById, getAClassroom, createClassroom, removeClassroom, updateClassroom, getClasroomPic, addMembers, uploadAssignment, uploadAnswer} = require('../controllers/classroom')
 const router = require('./auth')
 
 

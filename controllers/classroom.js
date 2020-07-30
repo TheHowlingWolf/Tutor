@@ -279,7 +279,7 @@ exports.getDocumentById = (req, res, next, id) => {
         if(err || !obj){
             console.log(err)
             return res.status(400).json({
-                error: "No such Class Room exits"
+                error: "No such Document exits"
             })
         }
         req.Classroom = obj;
@@ -292,7 +292,7 @@ exports.getAssignmentById = (req, res, next, id) => {
         if(err || !obj){
             console.log(err)
             return res.status(400).json({
-                error: "No such Class Room exits"
+                error: "No such Document exits"
             })
         }
         req.Classroom = obj;
