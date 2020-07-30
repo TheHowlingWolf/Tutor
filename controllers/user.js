@@ -164,7 +164,7 @@ exports.studentClassrooms = (req,res) => {
 
 exports.studentClasses = (req,res) => {
   const subclass = []
-  console.log(req.body)
+  // console.log(req.body)
   User.findById(req.body.user_id).exec((err, user) => {
     if (err || !user) {
       return res.status(400).json({

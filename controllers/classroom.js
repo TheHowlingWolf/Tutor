@@ -12,6 +12,7 @@ const fs = require("fs")  //present by default in node no need to install
 exports.getClassroomById = (req, res, next, id) => {
     Classroom.findById(id).exec((err, obj) => {
         if(err || !obj){
+            console.log(err)
             return res.status(400).json({
                 error: "No such Class Room exits"
             })
@@ -41,18 +42,19 @@ exports.createClassroom = (req, res) => {
 exports.getAllClassrooms = (req, res) => {
     Classroom.find().exec((err, cat) => {
         if(err || !cat){
+            console.log(err)
             return res.status(400).json({
                 error: "Classrooms Do Not Exist"
             })
         }
-        console.log(cat)
+        // console.log(cat)
         res.json(cat)
     })
 }
 
 exports.getAClassroom = (req,res) => {
     const classroom= req.Classroom;
-    console.log(classroom)
+    // console.log(classroom)
     res.json(classroom)
 }
 

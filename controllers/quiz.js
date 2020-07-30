@@ -29,6 +29,21 @@ exports.getAQuiz = (req, res) => {
     })
     // return res.status(200).json(req.quiz);
   };
+  exports.deleteQuiz = (req, res) => {
+    
+    const quiz = req.quiz;
+    quiz.remove((err,sub)=>{
+        if(err){
+            return res.status(400).json({
+                error: "Failed to delete quiz"
+            })
+        }
+        res.json({
+            message: sub.name + " quiz deleted"
+        });
+        }
+    )
+  };
 
 exports.getQuestionById = (req, res, next, quesId) => {
     QuizQuestions.findById(quesId).then(question => {
@@ -41,8 +56,23 @@ exports.getQuestionById = (req, res, next, quesId) => {
     })
 }
 
+exports.getOptionById = (req, res, next, optionId) => {
+    AnswerOptions.findById(optionId).then(option => {
+        req.option = option;
+        next();
+    }).catch(err => {
+        return res.status(403).json({
+            error: "Error Finding the option"+err
+        })
+    })
+}
+
 exports.getAQuestion = (req, res) =>{
     return res.status(200).json(req.question);
+}
+
+exports.getAOption = (req, res) =>{
+    return res.status(200).json(req.option);
 }
 
 exports.createQuiz = (req, res) => {
@@ -51,8 +81,26 @@ exports.createQuiz = (req, res) => {
         subject: req.body.subject,
         endTime: req.body.endTime,
         start: req.body.start,
-        teacher: req.body.teacher
+        teacher: req.body.teacher,
+        duration: req.body.mm
     });
+
+    quiz.save().then(quiz => {
+        res.status(200).json({
+            data: quiz
+        });
+    });
+}
+
+exports.updateQuiz = (req, res) => {
+    const quiz = req.quiz
+
+        quiz.title= req.body.title,
+        quiz.subject= req.body.subject,
+        quiz.endTime= req.body.endTime,
+        quiz.start= req.body.start,
+        quiz.teacher= req.body.teacher,
+        quiz.duration= req.body.mm
 
     quiz.save().then(quiz => {
         res.status(200).json({
@@ -152,7 +200,10 @@ exports.createQuestion = (req, res) => {
 }
 
 exports.updateQuestion = (req, res) => {
-    
+    console.log("^^",req.question)
+    // for (var key of req.body.entries()) {
+    //     console.log(key[0] + ', ' + key[1])
+    // }
     let form = new formidable.IncomingForm();
     form.keepExtensions = true;
 
@@ -188,7 +239,8 @@ exports.updateQuestion = (req, res) => {
         //Save to db
         question.save().then(async ques => {
             //Push the question the the quiz list using promise to synchronise it
-
+            
+            console.log(" Question updated");
             return res.json(ques)
         }).catch(err => {
             // question.save Catch Block
@@ -207,6 +259,21 @@ exports.deleteQuestion = (req,res) =>{
         if(err || !ques){
             return res.status(400).json({
                 error: "Question not deleted"
+            })
+        }
+        res.json(ques);
+    });
+}
+
+exports.deleteOption = (req,res) =>{
+    console.log("kkkkkkkkkkkk")
+    QuizQuestions.updateOne(
+        { _id: req.question._id },
+        { $pull: { options: { $in: [ req.option._id ] } } },
+        (err,ques)=>{
+        if(err || !ques){
+            return res.status(400).json({
+                error: "Option not deleted"
             })
         }
         res.json(ques);
@@ -237,6 +304,17 @@ exports.createOption = (req, res) => {
     })
 }
 
+exports.updateOption = (req, res) => {
+    
+    const option = req.option
+        option.optionValue= req.body.optionValue,
+        option.isCorrect= req.body.isCorrect ? true : false
+   
+    option.save().then(option => {
+        res.json(option)
+    })
+}
+
 exports.img = (req,res,next) => {
     
     if(req.question.img.data){
@@ -246,7 +324,7 @@ exports.img = (req,res,next) => {
     next();
 };
 
-exports.getQuiz = (req, res) => {
+exports.getQuizQuestions = (req, res) => {
     
     Quiz.find().select("-img").populate({
         path: 'questions', select: "-img", populate: {
@@ -265,4 +343,5 @@ exports.getQuizByTeacher = (req, res) => {
         res.status(200).json(quiz)
     })
 }
+
 
