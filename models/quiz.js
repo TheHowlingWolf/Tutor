@@ -12,10 +12,10 @@ const quizSchema = new Mongoose.Schema({
     required: true,
     // ref: "Subject"
   },
-  standard: {
-    type: String,
-    required: true
-  },
+  // standard: {
+  //   type: String,
+  //   required: true
+  // },
   endTime: { 
     type: String
    },
