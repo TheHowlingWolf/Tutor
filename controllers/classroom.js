@@ -3,6 +3,7 @@ const DocumentO = require('../models/Document');
 const AssignmentO = require('../models/Assignment');
 const AnswerO = require('../models/AssignmentAnswers')
 const User = require('../models/user')
+const users = []
 const path = require('path');
 const formidable = require('formidable')
 const _ = require("lodash") //we use _ when we need to declare a private variable but not going to use too much of it
@@ -311,4 +312,32 @@ exports.getAnswerById = (req, res, next, id) => {
         req.Classroom = obj;
         next();
     })
+}
+
+exports.getAllMembers = (req, res) => {
+    const classroom = req.Classroom;
+    
+    classroom.members.map((obj,i) => {
+        User.find().exec((err, user) => {
+            if(err || !user){
+                console.log(err)
+                return res.status(400).json({
+                    error: "Users Do Not Exist"
+                })
+            }
+            console.log(user);
+            user.map((o,i) => {
+                
+                if(o._id.toString() === obj.toString()){
+                    o.encry_password ="";
+                    o.salt="";
+                    o.role="";
+                    users.push(o);
+                }
+            })
+            
+        })
+        
+    })
+    res.json({users})
 }
