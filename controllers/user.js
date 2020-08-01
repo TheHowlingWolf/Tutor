@@ -5,6 +5,7 @@ const Class = require('../models/Class');
 
 //finding user
 exports.getUserById = (req, res, next, id) => {
+  console.log("kk")
   User.findById(id).exec((err, user) => {
     if (err || !user) {
       return res.status(400).json({
@@ -46,7 +47,6 @@ exports.photoUser = (req, res, next) => {
 };
 
 exports.updatedUser = (req, res) =>{
-  console.log("hello")
   User.findByIdAndUpdate({_id: req.user._id},
       {$set: req.body},
       {new: true,useFindAndModify: false},
@@ -63,6 +63,36 @@ exports.updatedUser = (req, res) =>{
           res.json(user);
       }
       );
+}
+
+//update
+exports.getUserByEmailandUpdate = (req, res) =>{
+  console.log(req.body,"hh")
+  User.find({email:req.body.email}).exec((err,obj)=>{
+    if(err){
+      return res.status(400).json({
+          error: "Updating not authorized"+err
+      })
+  }
+  console.log(obj)
+  User.findByIdAndUpdate({_id: obj[0]._id},
+    {$set: req.body},
+    {new: true,useFindAndModify: false},
+    (err,user) => {
+        if(err){
+            return res.status(400).json({
+                error: "Updating not authorized"+err
+            })
+        }
+        obj.salt = undefined;
+        obj.encry_password = undefined;
+        obj.createdAt = undefined;
+        obj.updatedAt = undefined;
+        res.json(user);
+    }
+    );
+  })
+
 }
 
 // send a json like {

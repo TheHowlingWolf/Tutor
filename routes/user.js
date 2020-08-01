@@ -9,7 +9,8 @@ const {
   updatedUser,
   addSubjects,
   studentClassrooms,
-  studentClasses
+  studentClasses,
+  getUserByEmailandUpdate
 } = require("../controllers/user");
 
 const { isAdmin, isAuthenticated, isSignedIn } = require("../controllers/auth");
@@ -24,6 +25,9 @@ router.get("/user/:userId", isSignedIn, getOneUser);
 
 //Updating user
 router.put("/update/:userId", isSignedIn, updatedUser);
+
+//Change role
+router.put("/update/role/:userId", getUserByEmailandUpdate);
 
 //Getting All User
 router.get("/users", getAllUsers);

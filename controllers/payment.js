@@ -35,7 +35,7 @@ const razorpay = new Razorpay({
  exports.paymentVerification = (req,res)=>{
     //do a validation
     const secret = '12345678'
-      console.log(req.body)
+      // console.log(req.body)
     const crypto = require('crypto')
     console.log("hiii")
       const shasum = crypto.createHmac('sha256', secret)
@@ -65,7 +65,7 @@ const razorpay = new Razorpay({
                     error: "Please enter all the fields!"
                 })
             }
-            res.json({payment})
+            // res.json({payment})
         })
           // require('fs').writeFileSync('payment2.json', JSON.stringify(req.body, null, 4))
       } else {
