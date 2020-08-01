@@ -1,6 +1,7 @@
 const Quiz = require("../models/Quiz");
 const QuizQuestions = require("../models/QuizQuestions");
 const Response = require("../models/Responses");
+const UserO = require('../models/user');
 const formidable = require('formidable');
 const AnswerOptions = require("../models/AnswerOptions");
 const fs = require('fs');
@@ -347,3 +348,43 @@ exports.getQuizByTeacher = (req, res) => {
 }
 
 
+exports.studentQuizes = (req,res) => {
+    const subquiz = []
+    // console.log(req.body)
+    UserO.findById(req.body.user_id).exec((err, user) => {
+      if (err || !user) {
+        return res.status(400).json({
+          error: "No User is found in Database",
+        });
+      }
+      const userO = user;
+  
+      Quiz.find().select("-img").populate({
+        path: 'questions', select: "-img", populate: {
+            path: "options",
+            model: "AnswerOption"
+        }
+    }).then(quizes => {
+      if(err || !quizes){
+          return res.status(400).json({
+              error: "Classes Do Not Exist"
+          })
+          
+      }
+      quizes.map((obj, i) => {
+        userO.subject.map((o,i)=>{
+          if(o.name === undefined){o.name = "wrong"}
+          if((obj.subject.toString() === o.name.toString())&&((parseInt(o.value) !== 0))
+          &&(userO.standard.toString() === obj.standard.toString())
+          ){
+            subquiz.unshift(obj)
+          }
+        })
+      })
+      res.json(subquiz);
+  })
+  }
+  )
+  
+  }
+  

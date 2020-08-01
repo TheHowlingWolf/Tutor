@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-const { getQuizById, createQuiz, createQuestion, getQuestionById,updateQuiz,getOptionById,getAOption, getQuizQuestions,deleteQuiz,updateOption, createOption,deleteOption, getQuizByTeacher, getAQuiz,deleteQuestion ,updateQuestion, getAQuestion,img,createResponse } = require("../controllers/quiz")
+const { getQuizById, createQuiz, createQuestion, getQuestionById,updateQuiz,getOptionById,getAOption, studentQuizes, getQuizQuestions,deleteQuiz,updateOption, createOption,deleteOption, getQuizByTeacher, getAQuiz,deleteQuestion ,updateQuestion, getAQuestion,img,createResponse } = require("../controllers/quiz")
 const { getUserById } = require("../controllers/user")
 const { isAdmin, isAuthenticated, isSignedIn } = require("../controllers/auth");
 const { addSubject } = require("../controllers/subject");
@@ -45,6 +45,8 @@ router.get("/question/:quesId", getAQuestion);
 router.get("/option/:optionId", getAOption);
 
 router.get("/quizzes/:userId", getQuizQuestions);
+
+router.post("/user/subquizes", studentQuizes);
 
 
 module.exports = router;

@@ -340,7 +340,7 @@ exports.getAnswerById = (req, res, next, id) => {
 
 exports.getAllMembers = (req, res) => {
     const classroom = req.Classroom;
-    
+    console.log(req + "heeeee")
     classroom.members.map((obj,i) => {
         User.find().exec((err, user) => {
             if(err || !user){
@@ -364,4 +364,55 @@ exports.getAllMembers = (req, res) => {
         
     })
     res.json({users})
+}
+
+exports.removeDocument = (req,res) => {
+    var docs=[]
+    Classroom.findById(req.body.cid)
+  .then( classroom => {
+      classroom.doc.map((o,i) => {
+          if(o._id.toString() !== req.body.did.toString()){
+            docs.push(o)
+          }
+      })
+      classroom.doc = docs;
+      classroom.save((err, updatedClassroom) => {
+        if(err || !updatedClassroom){
+            return res.status(400).json({
+                error: "Document not Deleted " + err
+            })
+        }
+        res.json(updatedClassroom)
+    })
+  })
+  .catch(err => console.log(err))
+}
+
+exports.removeAssignment = (req,res) => {
+    var docs=[]
+    var ans = []
+    Classroom.findById(req.body.cid)
+  .then( classroom => {
+      classroom.assignment.map((o,i) => {
+          if(o._id.toString() !== req.body.did.toString()){
+            docs.push(o)
+          }
+      })
+      classroom.assignmentanswers.map((o,i) => {
+        if(o.qid.toString() !== req.body.did.toString()){
+          ans.push(o)
+        }
+    })
+      classroom.assignment = docs;
+      classroom.assignmentanswers = ans;
+      classroom.save((err, updatedClassroom) => {
+        if(err || !updatedClassroom){
+            return res.status(400).json({
+                error: "Document not Deleted " + err
+            })
+        }
+        res.json(updatedClassroom)
+    })
+  })
+  .catch(err => console.log(err))
 }

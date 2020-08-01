@@ -41,7 +41,9 @@ router.put("/user/addSubject", addSubjects);
 //getting classrooms of the subscribed subjects
 router.post("/user/subclassrooms", studentClassrooms);
 
-//getting classrooms of the subscribed subjects
+//getting classes of the subscribed subjects
 router.post("/user/subclasses", studentClasses);
+
+
 
 module.exports = router;

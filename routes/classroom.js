@@ -5,7 +5,7 @@ const { isAdmin,isSignedIn,isAuthenticated,isTeacher } = require("../controllers
 const { getUserById } = require("../controllers/user")
 
 
-const {uploadDocument2,getAllClassrooms,getDocumentById,getAnswerById,getAssignmentById,getAssignment,getAnswer, getClassroomById, getAClassroom,getDocument, createClassroom, removeClassroom, updateClassroom, getClasroomPic, addMembers, uploadAssignment, uploadAnswer, getAllMembers} = require('../controllers/classroom')
+const {removeDocument, uploadDocument2,getAllClassrooms,getDocumentById,getAnswerById,getAssignmentById,getAssignment,getAnswer, getClassroomById, getAClassroom,getDocument, createClassroom, removeClassroom, updateClassroom, getClasroomPic, addMembers, uploadAssignment, uploadAnswer, getAllMembers, removeAssignment} = require('../controllers/classroom')
 
 const router = require('./auth')
 
@@ -28,6 +28,8 @@ router.get("/classroom/:classroomId", getAClassroom);
 
 //delete classroom
 router.delete("/classroom/delete/:classroomId", removeClassroom);
+router.put("/document/delete", removeDocument);
+router.put("/assignment/delete", removeAssignment);
 
 //update classroom
 router.put("/classroom/update/:classroomId", updateClassroom);
