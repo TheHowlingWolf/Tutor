@@ -104,7 +104,9 @@ exports.addSubjects = (req, res) =>{
   .then( subject => {
   User.findById(req.body.user_id)
   .then(user =>{
-    console.log(user)
+    console.log("i was here " + req.body.user_id)
+    console.log("i was here " + req.body.subject_id)
+    console.log("i was here " + req.body.value)
     if(user.subject.filter(
       subjects => subjects._id.toString() === subject._id.toString()
     ).length > 0){
@@ -145,6 +147,54 @@ exports.addSubjects = (req, res) =>{
   .catch(err => console.log("User not found "+err))
 })
 .catch(err => console.log("Subject not found "+ err))
+}
+
+exports.buySubjects = (req, res) =>{
+  const Subjects = req.body.subject;
+  var updatesubject;
+  User.findById(req.body.user_id)
+  .then(user =>{
+    updatesubject = user.subject;
+    Subjects.map((sub, i) =>
+    {  Subject.findById(sub[0].id)
+    .then( subject => {
+      console.log(subject)
+      if(updatesubject.filter(
+        subjects => subjects._id.toString() === subject._id.toString()
+      ).length > 0){
+        updatesubject.map((obj,i) => {
+          if(obj._id.toString() === subject._id.toString())
+          {
+            obj.value = parseInt(obj.value) + parseInt(sub[0].count);
+            
+          }
+        })
+      }else{
+        if(sub[0].count !== 0){
+        subject.value = sub[0].count;}
+      updatesubject.unshift(subject);}
+      user.subject = updatesubject;
+      User.findByIdAndUpdate({_id: req.body.user_id},
+        {$set: user},
+        {new: true,useFindAndModify: false},
+        (err,user) => {
+            if(err){
+                return res.status(400).json({
+                    error: "Updating not authorized"
+                })
+            }
+            user.salt = undefined;
+            user.encry_password = undefined;
+            user.createdAt = undefined;
+            user.updatedAt = undefined;
+        }
+        );
+    })
+    .catch(err => console.log(err))  
+  })
+  })
+  .catch(err => console.log("User not found "+err))
+
 }
 
 exports.studentClassrooms = (req,res) => {
