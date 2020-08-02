@@ -5,6 +5,7 @@ const UserO = require('../models/user');
 const formidable = require('formidable');
 const AnswerOptions = require("../models/AnswerOptions");
 const fs = require('fs');
+const User = require("../models/user");
 
 exports.getQuizById = (req, res, next, quizid) => {
     Quiz.findById(quizid).then(quiz => {
@@ -25,12 +26,18 @@ exports.getAQuiz = (req, res) => {
             path: "options",
             model: "AnswerOption"
         }
+    }).populate({
+        path: 'responses', model: "Response",  populate: {
+            path: "response",
+            model: "AnswerOption"
+        }
     }).then(quiz => {
         res.status(200).json({ data: quiz })
     })
     // return res.status(200).json(req.quiz);
   };
-  exports.deleteQuiz = (req, res) => {
+
+exports.deleteQuiz = (req, res) => {
     
     const quiz = req.quiz;
     quiz.remove((err,sub)=>{
@@ -45,6 +52,7 @@ exports.getAQuiz = (req, res) => {
         }
     )
   };
+
 
 exports.getQuestionById = (req, res, next, quesId) => {
     QuizQuestions.findById(quesId).then(question => {
@@ -123,12 +131,55 @@ exports.createResponse = (req, res) => {
         student: req.body.user._id,
         totalMarks: req.body.totalMarks
     });
+    response.save().then(async resp => {
+            //Push the question the the quiz list using promise to synchronise it
+            const pushed = await Promise.resolve(req.quiz.responses.push(resp._id));
+            const pushed2 = await Promise.resolve(req.user.quiz.push(resp._id));
+            req.quiz.save()
+                .then(updatedQuiz => {
+                    res.status(200).json({
+                        data: resp
+                    });
+                }).catch(err => {
 
-    response.save().then(quiz => {
-        res.status(200).json({
-            data: quiz
+                    console.log("Quiz Update", err);
+                    Response.findByIdAndDelete(resp._id).then(data => {
+                        res.status(500).json({ error: "Cannot record your response please refresh and try again."+err });
+                    }).catch(err => {
+                        console.log(" Response Delete", err);
+                        res.status(500).json({ error: "Cannot record your response please refresh and try again."+err });
+                    })
+                })
+
+              User.findByIdAndUpdate({_id: req.user._id},
+    {$set: req.body},
+    {new: true,useFindAndModify: false},
+    (err,user) => {
+        if(err){
+            {
+
+                    console.log("User Update error: ", err);
+                    Response.findByIdAndDelete(resp._id).then(data => {
+                        res.status(500).json({ error: "Cannot record your response please refresh and try again."+err });
+                    }).catch(err => {
+                        console.log(" Response Delete", err);
+                        res.status(500).json({ error: "Cannot record your response please refresh and try again."+err });
+                    })
+                }
+        }
+        req.user.salt = undefined;
+        req.user.encry_password = undefined;
+        req.user.createdAt = undefined;
+        req.user.updatedAt = undefined;
+        res.json(user);
+    }
+    );
+
+        }).catch(err => {
+            // question.save Catch Block
+            console.log(" Response save", err);
+            res.status(403).json({ error: "Cannot Record your Response" });
         });
-    });
 }
 
 exports.createQuestion = (req, res) => {
@@ -269,7 +320,6 @@ exports.deleteQuestion = (req,res) =>{
 }
 
 exports.deleteOption = (req,res) =>{
-    console.log("kkkkkkkkkkkk")
     QuizQuestions.updateOne(
         { _id: req.question._id },
         { $pull: { options: { $in: [ req.option._id ] } } },
@@ -332,6 +382,11 @@ exports.getQuizQuestions = (req, res) => {
     Quiz.find().select("-img").populate({
         path: 'questions', select: "-img", populate: {
             path: "options",
+            model: "AnswerOption"
+        }
+    }).populate({
+        path: 'responses', model: "Response",  populate: {
+            path: "response",
             model: "AnswerOption"
         }
     }).then(quiz => {

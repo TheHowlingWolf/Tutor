@@ -8,11 +8,6 @@ const ResponseSchema = new mongoose.Schema({
         ref: 'Quiz',
         required: true
     },
-    // questions: {
-    //     type: mongoose.Types.ObjectId,
-    //     ref: 'Question',
-    //     required: true
-    // },
     response:[{
         type: mongoose.Types.ObjectId,
         ref: 'AnswerOption',

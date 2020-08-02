@@ -12,22 +12,13 @@ const AssignmentAnswerSchema = new mongoose.Schema({
     uploader:{
         type: String
     },
-    // answers:[{
-    //     type: Object,
-    //     ref: 'Document'
-    // }],
 
     type: {
-        type: String,//true for uploading assignments and false for uploading Notes
-        // required: true
+        type: String,
     },
     qid:{
         type:String
     },
-    // student_file: [{
-    //     data: Buffer,
-    //     contentType: String
-    // }],
     date: {
         type:Date
     }

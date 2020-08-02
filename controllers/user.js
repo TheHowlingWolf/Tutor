@@ -2,6 +2,7 @@ const User = require("../models/user");
 const Subject = require("../models/Subject");
 const Classroom = require('../models/Classroom');
 const Class = require('../models/Class');
+const Response = require("../models/Responses");
 
 //finding user
 exports.getUserById = (req, res, next, id) => {
@@ -36,6 +37,17 @@ exports.getAllUsers = (req, res, next) => {
     return res.status(200).json(users);
   });
 };
+
+exports.getResponsebyUser = (req,res) =>{
+  User.find({ _id: req.user._id}).select("-img").populate({
+        path: 'quiz',model: "Response", select: "-img", populate: {
+            path: "response",
+            model: "AnswerOption"
+        }
+    }).then(user => {
+        res.status(200).json({ data: user })
+    })
+}
 
 //Getting userPic
 exports.photoUser = (req, res, next) => {
@@ -75,6 +87,7 @@ exports.getUserByEmailandUpdate = (req, res) =>{
       })
   }
   console.log(obj)
+  if(obj[0]){
   User.findByIdAndUpdate({_id: obj[0]._id},
     {$set: req.body},
     {new: true,useFindAndModify: false},
@@ -91,6 +104,12 @@ exports.getUserByEmailandUpdate = (req, res) =>{
         res.json(user);
     }
     );
+  }
+  else{
+     return res.status(400).json({
+          error: "Please register the user first"
+      })
+  }
   })
 
 }

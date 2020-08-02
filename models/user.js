@@ -18,6 +18,10 @@ const userSchema = new mongoose.Schema(
       type: mongoose.Types.ObjectId,
       ref: 'ClassRoom'
     }],
+    quiz: [{
+      type: mongoose.Types.ObjectId,
+      ref: 'Responses'
+    }],
     // physics: {
     // type: Number,
     // default: 0

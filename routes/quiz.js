@@ -20,7 +20,7 @@ router.post("/quiz/create", createQuiz);
 router.put("/quiz/update/:quizId", updateQuiz);
 
 router.delete("/quiz/delete/:quizId", deleteQuiz);
-router.post("/response/create", createResponse);
+router.post("/response/create/:quizId/:userId", createResponse);
 
 router.post("/question/create/quiz/:quizId", createQuestion);
 
