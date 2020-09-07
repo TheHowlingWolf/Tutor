@@ -22,7 +22,11 @@ const ResponseSchema = new mongoose.Schema({
         type: Number,
         default: 0
     }
-})
+},
+  {
+    timestamps: true, //this timestamp records the time of entry in the db
+  }
+)
 
 
 module.exports = mongoose.model('Response', ResponseSchema);

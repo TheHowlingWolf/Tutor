@@ -36,6 +36,7 @@ router.put("/option/update/:optionId", updateOption);
 router.get("/question/img/:quesId",img) 
 
 router.get("/allquiz/quiz/:quizId", getAQuiz);
+router.get("/allquiz/responses/:quizId", getAQuiz);
 
 router.get("/allquiz/start/quiz/:quizId", getAQuiz);
 

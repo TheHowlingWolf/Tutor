@@ -31,6 +31,11 @@ exports.getAQuiz = (req, res) => {
             path: "response",
             model: "AnswerOption"
         }
+    }).populate({
+        path: 'responses', model: "Response",  populate: {
+            path: "student",
+            model: "User",select: "name"
+        }
     }).then(quiz => {
         res.status(200).json({ data: quiz })
     })
