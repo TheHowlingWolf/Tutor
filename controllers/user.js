@@ -1,12 +1,12 @@
 const User = require("../models/user");
 const Subject = require("../models/Subject");
-const Classroom = require('../models/Classroom');
-const Class = require('../models/Class');
+const Classroom = require("../models/Classroom");
+const Class = require("../models/Class");
 const Response = require("../models/Responses");
 
 //finding user
 exports.getUserById = (req, res, next, id) => {
-  console.log("kk")
+  console.log("kk");
   User.findById(id).exec((err, user) => {
     if (err || !user) {
       return res.status(400).json({
@@ -38,16 +38,22 @@ exports.getAllUsers = (req, res, next) => {
   });
 };
 
-exports.getResponsebyUser = (req,res) =>{
-  User.find({ _id: req.user._id}).select("-img").populate({
-        path: 'quiz',model: "Response", select: "-img", populate: {
-            path: "response",
-            model: "AnswerOption"
-        }
-    }).then(user => {
-        res.status(200).json({ data: user })
+exports.getResponsebyUser = (req, res) => {
+  User.find({ _id: req.user._id })
+    .select("-img")
+    .populate({
+      path: "quiz",
+      model: "Response",
+      select: "-img",
+      populate: {
+        path: "response",
+        model: "AnswerOption",
+      },
     })
-}
+    .then((user) => {
+      res.status(200).json({ data: user });
+    });
+};
 
 //Getting userPic
 exports.photoUser = (req, res, next) => {
@@ -58,167 +64,173 @@ exports.photoUser = (req, res, next) => {
   next();
 };
 
-exports.updatedUser = (req, res) =>{
-  User.findByIdAndUpdate({_id: req.user._id},
-      {$set: req.body},
-      {new: true,useFindAndModify: false},
-      (err,user) => {
-          if(err){
-              return res.status(400).json({
-                  error: "Updating not authorized"
-              })
-          }
-          req.user.salt = undefined;
-          req.user.encry_password = undefined;
-          req.user.createdAt = undefined;
-          req.user.updatedAt = undefined;
-          res.json(user);
+exports.updatedUser = (req, res) => {
+  User.findByIdAndUpdate(
+    { _id: req.user._id },
+    { $set: req.body },
+    { new: true, useFindAndModify: false },
+    (err, user) => {
+      if (err) {
+        return res.status(400).json({
+          error: "Updating not authorized",
+        });
       }
-      );
-}
+      req.user.salt = undefined;
+      req.user.encry_password = undefined;
+      req.user.createdAt = undefined;
+      req.user.updatedAt = undefined;
+      res.json(user);
+    }
+  );
+};
 
 //update
-exports.getUserByEmailandUpdate = (req, res) =>{
-  console.log(req.body,"hh")
-  User.find({email:req.body.email}).exec((err,obj)=>{
-    if(err){
+exports.getUserByEmailandUpdate = (req, res) => {
+  console.log(req.body, "hh");
+  User.find({ email: req.body.email }).exec((err, obj) => {
+    if (err) {
       return res.status(400).json({
-          error: "Updating not authorized"+err
-      })
-  }
-  console.log(obj)
-  if(obj[0]){
-  User.findByIdAndUpdate({_id: obj[0]._id},
-    {$set: req.body},
-    {new: true,useFindAndModify: false},
-    (err,user) => {
-        if(err){
-            return res.status(400).json({
-                error: "Updating not authorized"+err
-            })
-        }
-        obj.salt = undefined;
-        obj.encry_password = undefined;
-        obj.createdAt = undefined;
-        obj.updatedAt = undefined;
-        res.json(user);
+        error: "Updating not authorized" + err,
+      });
     }
-    );
-  }
-  else{
-     return res.status(400).json({
-          error: "Please register the user first"
-      })
-  }
-  })
-
-}
+    console.log(obj);
+    if (obj[0]) {
+      User.findByIdAndUpdate(
+        { _id: obj[0]._id },
+        { $set: req.body },
+        { new: true, useFindAndModify: false },
+        (err, user) => {
+          if (err) {
+            return res.status(400).json({
+              error: "Updating not authorized" + err,
+            });
+          }
+          obj.salt = undefined;
+          obj.encry_password = undefined;
+          obj.createdAt = undefined;
+          obj.updatedAt = undefined;
+          res.json(user);
+        }
+      );
+    } else {
+      return res.status(400).json({
+        error: "Please register the user first",
+      });
+    }
+  });
+};
 
 // send a json like {
 //   subject_id:"hsddhkjsbkjjasdbhjadsb",
 //   user_id:"bkjasbjsbajhbjhds"
 // }
-exports.addSubjects = (req, res) =>{
+exports.addSubjects = (req, res) => {
   Subject.findById(req.body.subject_id)
-  .then( subject => {
-  User.findById(req.body.user_id)
-  .then(user =>{
-    console.log("i was here " + req.body.user_id)
-    console.log("i was here " + req.body.subject_id)
-    console.log("i was here " + req.body.value)
-    if(user.subject.filter(
-      subjects => subjects._id.toString() === subject._id.toString()
-    ).length > 0){
-      // user.subject.findById(req.body.subject_id)
-      // .then(subjects => subjects.value = req.body.value)
-      // .catch(err => console.log("error in changing value "+err))
-      user.subject.map((obj,i) => {
-        if(obj._id.toString() === subject._id.toString())
-        {
-          obj.value = req.body.value;
-        }
-      })
-    }else{
-      if(req.body.value !== 0){
-      subject.value = req.body.value;}
-    user.subject.unshift(subject);}
-    console.log(user)
-    // user.save()
-    // .then(saved => res.json(saved))
-    // .catch(err => console.log("subject not added to user "+err))
-    User.findByIdAndUpdate({_id: req.body.user_id},
-      {$set: user},
-      {new: true,useFindAndModify: false},
-      (err,user) => {
-          if(err){
-              return res.status(400).json({
-                  error: "Updating not authorized"
-              })
+    .then((subject) => {
+      User.findById(req.body.user_id)
+        .then((user) => {
+          console.log("i was here " + req.body.user_id);
+          console.log("i was here " + req.body.subject_id);
+          console.log("i was here " + req.body.value);
+          if (
+            user.subject.filter(
+              (subjects) => subjects._id.toString() === subject._id.toString()
+            ).length > 0
+          ) {
+            // user.subject.findById(req.body.subject_id)
+            // .then(subjects => subjects.value = req.body.value)
+            // .catch(err => console.log("error in changing value "+err))
+            user.subject.map((obj, i) => {
+              if (obj._id.toString() === subject._id.toString()) {
+                obj.value = req.body.value;
+              }
+            });
+          } else {
+            if (req.body.value !== 0) {
+              subject.value = req.body.value;
+            }
+            user.subject.unshift(subject);
           }
-          user.salt = undefined;
-          user.encry_password = undefined;
-          user.createdAt = undefined;
-          user.updatedAt = undefined;
-          res.json(user);
-      }
-      );
-  })
-  .catch(err => console.log("User not found "+err))
-})
-.catch(err => console.log("Subject not found "+ err))
-}
+          console.log(user);
+          // user.save()
+          // .then(saved => res.json(saved))
+          // .catch(err => console.log("subject not added to user "+err))
+          User.findByIdAndUpdate(
+            { _id: req.body.user_id },
+            { $set: user },
+            { new: true, useFindAndModify: false },
+            (err, user) => {
+              if (err) {
+                return res.status(400).json({
+                  error: "Updating not authorized",
+                });
+              }
+              user.salt = undefined;
+              user.encry_password = undefined;
+              user.createdAt = undefined;
+              user.updatedAt = undefined;
+              res.json(user);
+            }
+          );
+        })
+        .catch((err) => console.log("User not found " + err));
+    })
+    .catch((err) => console.log("Subject not found " + err));
+};
 
-exports.buySubjects = (req, res) =>{
+exports.buySubjects = (req, res) => {
   const Subjects = req.body.subject;
   var updatesubject;
   User.findById(req.body.user_id)
-  .then(user =>{
-    updatesubject = user.subject;
-    Subjects.map((sub, i) =>
-    {  Subject.findById(sub[0].id)
-    .then( subject => {
-      console.log(subject)
-      if(updatesubject.filter(
-        subjects => subjects._id.toString() === subject._id.toString()
-      ).length > 0){
-        updatesubject.map((obj,i) => {
-          if(obj._id.toString() === subject._id.toString())
-          {
-            obj.value = parseInt(obj.value) + parseInt(sub[0].count);
-            
-          }
-        })
-      }else{
-        if(sub[0].count !== 0){
-        subject.value = sub[0].count;}
-      updatesubject.unshift(subject);}
-      user.subject = updatesubject;
-      User.findByIdAndUpdate({_id: req.body.user_id},
-        {$set: user},
-        {new: true,useFindAndModify: false},
-        (err,user) => {
-            if(err){
-                return res.status(400).json({
-                    error: "Updating not authorized"
-                })
+    .then((user) => {
+      updatesubject = user.subject;
+      Subjects.map((sub, i) => {
+        Subject.findById(sub[0].id)
+          .then((subject) => {
+            console.log(subject);
+            if (
+              updatesubject.filter(
+                (subjects) => subjects._id.toString() === subject._id.toString()
+              ).length > 0
+            ) {
+              updatesubject.map((obj, i) => {
+                if (obj._id.toString() === subject._id.toString()) {
+                  obj.value = parseInt(obj.value) + parseInt(sub[0].count);
+                }
+              });
+            } else {
+              if (sub[0].count !== 0) {
+                subject.value = sub[0].count;
+              }
+              updatesubject.unshift(subject);
             }
-            user.salt = undefined;
-            user.encry_password = undefined;
-            user.createdAt = undefined;
-            user.updatedAt = undefined;
-        }
-        );
+            user.subject = updatesubject;
+            User.findByIdAndUpdate(
+              { _id: req.body.user_id },
+              { $set: user },
+              { new: true, useFindAndModify: false },
+              (err, user) => {
+                if (err) {
+                  return res.status(400).json({
+                    error: "Updating not authorized",
+                  });
+                }
+                user.salt = undefined;
+                user.encry_password = undefined;
+                user.createdAt = undefined;
+                user.updatedAt = undefined;
+              }
+            );
+          })
+          .catch((err) => console.log(err));
+      });
     })
-    .catch(err => console.log(err))  
-  })
-  })
-  .catch(err => console.log("User not found "+err))
+    .catch((err) => console.log("User not found " + err));
+};
 
-}
-
-exports.studentClassrooms = (req,res) => {
-  const subclass = []
-  console.log(req.body)
+exports.studentClassrooms = (req, res) => {
+  const subclass = [];
+  console.log(req.body);
   User.findById(req.body.user_id).exec((err, user) => {
     if (err || !user) {
       return res.status(400).json({
@@ -227,42 +239,44 @@ exports.studentClassrooms = (req,res) => {
     }
     const userO = user;
 
-  Classroom.find().exec((err, cat) => {
-    if(err || !cat){
+    Classroom.find().exec((err, cat) => {
+      if (err || !cat) {
         return res.status(400).json({
-            error: "Classrooms Do Not Exist"
-        })
-    }
-    cat.map((obj, i) => {
-      userO.subject.map((o,i)=>{
-        if(o.name === undefined){o.name = "wrong"}
-        if((obj.subject.toString() === o.name.toString())&&((parseInt(o.value) !== 0))
-        &&(userO.standard.toString() === obj.standard.toString())
-        ){
-          subclass.unshift(obj)
-          
-          if (
-            (obj.members.filter(
-              member => member.toString() === userO._id.toString()
-            ).length === 0)||(obj.members.length === 0)
-          ) {
-            console.log("hi");
-            obj.members.unshift(userO._id);
-                obj
-                  .save()
+          error: "Classrooms Do Not Exist",
+        });
+      }
+      cat.map((obj, i) => {
+        userO.subject.map((o, i) => {
+          if (o.name === undefined) {
+            o.name = "wrong";
           }
-        }
-      })
-    })
-    res.json(subclass);
-})
-}
-)
+          if (
+            obj.subject.toString() === o.name.toString() &&
+            parseInt(o.value) !== 0 &&
+            userO.standard.toString() === obj.standard.toString()
+          ) {
+            subclass.unshift(obj);
 
-}
+            if (
+              obj.members.filter(
+                (member) => member.toString() === userO._id.toString()
+              ).length === 0 ||
+              obj.members.length === 0
+            ) {
+              console.log("hi");
+              obj.members.unshift(userO._id);
+              obj.save();
+            }
+          }
+        });
+      });
+      res.json(subclass);
+    });
+  });
+};
 
-exports.studentClasses = (req,res) => {
-  const subclass = []
+exports.studentClasses = (req, res) => {
+  const subclass = [];
   // console.log(req.body)
   User.findById(req.body.user_id).exec((err, user) => {
     if (err || !user) {
@@ -272,27 +286,27 @@ exports.studentClasses = (req,res) => {
     }
     const userO = user;
 
-  Class.find().exec((err, cat) => {
-    if(err || !cat){
+    Class.find().exec((err, cat) => {
+      if (err || !cat) {
         return res.status(400).json({
-            error: "Classes Do Not Exist"
-        })
-        
-    }
-    cat.map((obj, i) => {
-      userO.subject.map((o,i)=>{
-        if(o.name === undefined){o.name = "wrong"}
-        if((obj.subject.toString() === o.name.toString())&&((parseInt(o.value) !== 0))
-        &&(userO.standard.toString() === obj.standard.toString())
-        ){
-          subclass.unshift(obj)
-        }
-      })
-    })
-    res.json(subclass);
-})
-}
-)
-
-}
-
+          error: "Classes Do Not Exist",
+        });
+      }
+      cat.map((obj, i) => {
+        userO.subject.map((o, i) => {
+          if (o.name === undefined) {
+            o.name = "wrong";
+          }
+          if (
+            obj.subject.toString() === o.name.toString() &&
+            parseInt(o.value) !== 0 &&
+            userO.standard.toString() === obj.standard.toString()
+          ) {
+            subclass.unshift(obj);
+          }
+        });
+      });
+      res.json(subclass);
+    });
+  });
+};

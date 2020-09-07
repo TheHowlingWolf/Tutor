@@ -12,16 +12,20 @@ const userSchema = new mongoose.Schema(
     },
     standard: {
       type: String,
-      required: true
+      required: true,
     },
-    classRoom: [{
-      type: mongoose.Types.ObjectId,
-      ref: 'ClassRoom'
-    }],
-    quiz: [{
-      type: mongoose.Types.ObjectId,
-      ref: 'Responses'
-    }],
+    classRoom: [
+      {
+        type: mongoose.Types.ObjectId,
+        ref: "ClassRoom",
+      },
+    ],
+    quiz: [
+      {
+        type: mongoose.Types.ObjectId,
+        ref: "Responses",
+      },
+    ],
     // physics: {
     // type: Number,
     // default: 0
@@ -38,11 +42,13 @@ const userSchema = new mongoose.Schema(
     //     type: Number,
     //     default: 0
     // },
-    subject:[{
-      type: Object
-      // type: mongoose.Types.ObjectId,
-      // ref: 'Subject'
-    }],
+    subject: [
+      {
+        type: Object,
+        // type: mongoose.Types.ObjectId,
+        // ref: 'Subject'
+      },
+    ],
     email: {
       type: String,
       required: true,
@@ -63,7 +69,7 @@ const userSchema = new mongoose.Schema(
     //Salt for Passwords
     salt: String, //defined in virtuals
     //Defining Roles
-    role:{
+    role: {
       type: Number, //Higher the number higher the priviledges
       default: 0,
     },
