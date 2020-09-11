@@ -41,9 +41,6 @@ exports.getAQuiz = (req, res) => {
     }).then(quiz => {
         res.status(200).json({ data: quiz })
     })
-    .then((quiz) => {
-      res.status(200).json({ data: quiz });
-    });
   // return res.status(200).json(req.quiz);
 };
 
@@ -136,6 +133,7 @@ exports.createResponse = (req, res) => {
   req.body.cSelected.forEach((resp) => {
     option.push(resp);
   });
+  // console.log(req)
   const response = new Response({
     response: option,
     quizId: req.body.quiz._id,
@@ -148,18 +146,25 @@ exports.createResponse = (req, res) => {
       //Push the question the the quiz list using promise to synchronise it
       const pushed = await Promise.resolve(req.quiz.responses.push(resp._id));
       const pushed2 = await Promise.resolve(req.user.quiz.push(resp._id));
+      console.log("hi",req.user)
       req.quiz
         .save()
         .then((updatedQuiz) => {
-          res.status(200).json({
-            data: resp,
-          });
+          // res.status(200).json({
+          //   data: resp,
+          // });
+          req.user.save().then(userd=>{
+            res.status(200).json({
+              data: resp,
+              user: userd
+            });
+          })
         })
         .catch((err) => {
           console.log("Quiz Update", err);
           Response.findByIdAndDelete(resp._id)
             .then((data) => {
-              res.status(500).json({
+              return res.status(500).json({
                 error:
                   "Cannot record your response please refresh and try again." +
                   err,
@@ -167,47 +172,13 @@ exports.createResponse = (req, res) => {
             })
             .catch((err) => {
               console.log(" Response Delete", err);
-              res.status(500).json({
+              return res.status(500).json({
                 error:
                   "Cannot record your response please refresh and try again." +
                   err,
               });
             });
         });
-
-      User.findByIdAndUpdate(
-        { _id: req.user._id },
-        { $set: req.body },
-        { new: true, useFindAndModify: false },
-        (err, user) => {
-          if (err) {
-            {
-              console.log("User Update error: ", err);
-              Response.findByIdAndDelete(resp._id)
-                .then((data) => {
-                  res.status(500).json({
-                    error:
-                      "Cannot record your response please refresh and try again." +
-                      err,
-                  });
-                })
-                .catch((err) => {
-                  console.log(" Response Delete", err);
-                  res.status(500).json({
-                    error:
-                      "Cannot record your response please refresh and try again." +
-                      err,
-                  });
-                });
-            }
-          }
-          req.user.salt = undefined;
-          req.user.encry_password = undefined;
-          req.user.createdAt = undefined;
-          req.user.updatedAt = undefined;
-          res.json(user);
-        }
-      );
     })
     .catch((err) => {
       // question.save Catch Block
