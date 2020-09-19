@@ -145,7 +145,7 @@ exports.createResponse = (req, res) => {
     .then(async (resp) => {
       //Push the question the the quiz list using promise to synchronise it
       const pushed = await Promise.resolve(req.quiz.responses.push(resp._id));
-      const pushed2 = await Promise.resolve(req.user.quiz.push(resp._id));
+      const pushed2 = await Promise.resolve(req.user.quiz.push(req.body.quiz._id));
       console.log("hi",req.user)
       req.quiz
         .save()
