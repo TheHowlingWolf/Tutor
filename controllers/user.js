@@ -1,16 +1,17 @@
-const User = require("../models/user");
-const Subject = require("../models/Subject");
-const Classroom = require("../models/Classroom");
-const Class = require("../models/Class");
-const Response = require("../models/Responses");
+const User = require('../models/user');
+const Subject = require('../models/Subject');
+const Classroom = require('../models/Classroom');
+const Class = require('../models/Class');
+const Response = require('../models/Responses');
+const { escapeRegex } = require('../utils/regexUtils');
 
 //finding user
 exports.getUserById = (req, res, next, id) => {
-  console.log("kk");
+  console.log('kk');
   User.findById(id).exec((err, user) => {
     if (err || !user) {
       return res.status(400).json({
-        error: "No User is found in Database",
+        error: 'No User is found in Database',
       });
     }
     req.user = user;
@@ -31,7 +32,7 @@ exports.getAllUsers = (req, res, next) => {
   User.find().exec((err, users) => {
     if (err || !users) {
       return res.status(400).json({
-        error: "No User found.",
+        error: 'No User found.',
       });
     }
     return res.status(200).json(users);
@@ -40,14 +41,14 @@ exports.getAllUsers = (req, res, next) => {
 
 exports.getResponsebyUser = (req, res) => {
   User.find({ _id: req.user._id })
-    .select("-img")
+    .select('-img')
     .populate({
-      path: "quiz",
-      model: "Response",
-      select: "-img",
+      path: 'quiz',
+      model: 'Response',
+      select: '-img',
       populate: {
-        path: "response",
-        model: "AnswerOption",
+        path: 'response',
+        model: 'AnswerOption',
       },
     })
     .then((user) => {
@@ -58,7 +59,7 @@ exports.getResponsebyUser = (req, res) => {
 //Getting userPic
 exports.photoUser = (req, res, next) => {
   if (req.user.proPic.data) {
-    res.set("Content-Type", req.doc.proPic.contentType);
+    res.set('Content-Type', req.doc.proPic.contentType);
     return res.send(req.doc.proPic.data);
   }
   next();
@@ -72,7 +73,7 @@ exports.updatedUser = (req, res) => {
     (err, user) => {
       if (err) {
         return res.status(400).json({
-          error: "Updating not authorized",
+          error: 'Updating not authorized',
         });
       }
       req.user.salt = undefined;
@@ -86,11 +87,11 @@ exports.updatedUser = (req, res) => {
 
 //update
 exports.getUserByEmailandUpdate = (req, res) => {
-  console.log(req.body, "hh");
+  console.log(req.body, 'hh');
   User.find({ email: req.body.email }).exec((err, obj) => {
     if (err) {
       return res.status(400).json({
-        error: "Updating not authorized" + err,
+        error: 'Updating not authorized' + err,
       });
     }
     console.log(obj);
@@ -102,7 +103,7 @@ exports.getUserByEmailandUpdate = (req, res) => {
         (err, user) => {
           if (err) {
             return res.status(400).json({
-              error: "Updating not authorized" + err,
+              error: 'Updating not authorized' + err,
             });
           }
           obj.salt = undefined;
@@ -114,7 +115,7 @@ exports.getUserByEmailandUpdate = (req, res) => {
       );
     } else {
       return res.status(400).json({
-        error: "Please register the user first",
+        error: 'Please register the user first',
       });
     }
   });
@@ -129,9 +130,9 @@ exports.addSubjects = (req, res) => {
     .then((subject) => {
       User.findById(req.body.user_id)
         .then((user) => {
-          console.log("i was here " + req.body.user_id);
-          console.log("i was here " + req.body.subject_id);
-          console.log("i was here " + req.body.value);
+          console.log('i was here ' + req.body.user_id);
+          console.log('i was here ' + req.body.subject_id);
+          console.log('i was here ' + req.body.value);
           if (
             user.subject.filter(
               (subjects) => subjects._id.toString() === subject._id.toString()
@@ -162,7 +163,7 @@ exports.addSubjects = (req, res) => {
             (err, user) => {
               if (err) {
                 return res.status(400).json({
-                  error: "Updating not authorized",
+                  error: 'Updating not authorized',
                 });
               }
               user.salt = undefined;
@@ -173,9 +174,9 @@ exports.addSubjects = (req, res) => {
             }
           );
         })
-        .catch((err) => console.log("User not found " + err));
+        .catch((err) => console.log('User not found ' + err));
     })
-    .catch((err) => console.log("Subject not found " + err));
+    .catch((err) => console.log('Subject not found ' + err));
 };
 
 exports.buySubjects = (req, res) => {
@@ -212,7 +213,7 @@ exports.buySubjects = (req, res) => {
               (err, user) => {
                 if (err) {
                   return res.status(400).json({
-                    error: "Updating not authorized",
+                    error: 'Updating not authorized',
                   });
                 }
                 user.salt = undefined;
@@ -225,7 +226,7 @@ exports.buySubjects = (req, res) => {
           .catch((err) => console.log(err));
       });
     })
-    .catch((err) => console.log("User not found " + err));
+    .catch((err) => console.log('User not found ' + err));
 };
 
 exports.studentClassrooms = (req, res) => {
@@ -234,7 +235,7 @@ exports.studentClassrooms = (req, res) => {
   User.findById(req.body.user_id).exec((err, user) => {
     if (err || !user) {
       return res.status(400).json({
-        error: "No User is found in Database",
+        error: 'No User is found in Database',
       });
     }
     const userO = user;
@@ -242,13 +243,13 @@ exports.studentClassrooms = (req, res) => {
     Classroom.find().exec((err, cat) => {
       if (err || !cat) {
         return res.status(400).json({
-          error: "Classrooms Do Not Exist",
+          error: 'Classrooms Do Not Exist',
         });
       }
       cat.map((obj, i) => {
         userO.subject.map((o, i) => {
           if (o.name === undefined) {
-            o.name = "wrong";
+            o.name = 'wrong';
           }
           if (
             obj.subject.toString() === o.name.toString() &&
@@ -263,7 +264,7 @@ exports.studentClassrooms = (req, res) => {
               ).length === 0 ||
               obj.members.length === 0
             ) {
-              console.log("hi");
+              console.log('hi');
               obj.members.unshift(userO._id);
               obj.save();
             }
@@ -281,7 +282,7 @@ exports.studentClasses = (req, res) => {
   User.findById(req.body.user_id).exec((err, user) => {
     if (err || !user) {
       return res.status(400).json({
-        error: "No User is found in Database",
+        error: 'No User is found in Database',
       });
     }
     const userO = user;
@@ -289,13 +290,13 @@ exports.studentClasses = (req, res) => {
     Class.find().exec((err, cat) => {
       if (err || !cat) {
         return res.status(400).json({
-          error: "Classes Do Not Exist",
+          error: 'Classes Do Not Exist',
         });
       }
       cat.map((obj, i) => {
         userO.subject.map((o, i) => {
           if (o.name === undefined) {
-            o.name = "wrong";
+            o.name = 'wrong';
           }
           if (
             obj.subject.toString() === o.name.toString() &&
@@ -309,4 +310,29 @@ exports.studentClasses = (req, res) => {
       res.json(subclass);
     });
   });
+};
+
+exports.searchUser = async (req, res) => {
+  try {
+    const { name, email } = req.body;
+    console.log(req.body);
+    const filter = {};
+    if (name) {
+      const nameRegex = new RegExp(escapeRegex(name.toLowerCase()), 'gi');
+      filter.name = nameRegex;
+    }
+    if (email) {
+      const emailRegex = new RegExp(escapeRegex(email.toLowerCase()), 'gi');
+      filter.email = emailRegex;
+    }
+    console.log(filter);
+    const users = await User.find(filter);
+    console.log(users);
+    res.json({ users });
+  } catch (error) {
+    console.log(error);
+    return res.status(400).json({
+      error: 'User Doesnot Exist',
+    });
+  }
 };
