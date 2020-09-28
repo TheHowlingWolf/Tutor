@@ -65,6 +65,8 @@ exports.updateSubject = (req,res) =>{
     subject.name = req.body.name;
     subject.price = req.body.price;
     subject.value = req.body.value;
+    subject.standard = req.body.standard;
+    subject.expiresOn = req.body.expiresOn;
     
     subject.save((err,updatedsubject) => {
         if(err || !updatedsubject){

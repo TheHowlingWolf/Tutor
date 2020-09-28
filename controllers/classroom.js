@@ -15,7 +15,7 @@ exports.getClassroomById = (req, res, next, id) => {
     .populate({ path: "owner" })
     .exec((err, obj) => {
       if (err || !obj) {
-        console.log(err);
+        // console.log(err);
         return res.status(400).json({
           error: "No such Class Room exits",
         });
@@ -48,25 +48,25 @@ exports.getAllClassrooms = (req, res) => {
     .populate({ path: "owner" })
     .exec((err, cat) => {
       if (err || !cat) {
-        console.log(err);
+        // console.log(err);
         return res.status(400).json({
           error: "Classrooms Do Not Exist",
         });
       }
-      // console.log(cat)
+      console.log(cat)
       res.json(cat);
     });
 };
 
 exports.getAClassroom = (req, res) => {
   const classroom = req.Classroom;
-  // console.log(classroom)
+  console.log(classroom)
   res.json(classroom);
 };
 
 exports.removeClassroom = (req, res) => {
   const classroom = req.Classroom;
-  console.log(classroom);
+  // console.log(classroom);
   classroom.remove((err, obj) => {
     if (err || !obj) {
       return res.status(400).json({
@@ -81,7 +81,7 @@ exports.removeClassroom = (req, res) => {
 
 exports.updateClassroom = (req, res) => {
   const classroom = req.Classroom;
-  console.log(classroom);
+  // console.log(classroom);
   classroom.name = req.body.name;
   classroom.description = req.body.description;
   classroom.subject = req.body.subject;
@@ -139,20 +139,20 @@ exports.addMembers = (req, res) => {
         return res.status(400).json({ error: "Member already exists" });
       }
       classroom.members.unshift(user);
-      console.log(user);
+      // console.log(user);
       classroom
         .save()
         .then((classroom) => res.json(classroom))
-        .catch((err) => console.log(err));
+        // .catch((err) => console.log(err));
     })
-    .catch((err) => console.log(err));
+    // .catch((err) => console.log(err));
 };
 
 exports.uploadDocument2 = (req, res) => {
   let form = new formidable.IncomingForm();
   form.keepExtensions = true;
   form.parse(req, (err, fields, files) => {
-    console.log("---");
+    // console.log("---");
     if (err) {
       return res.status(400).json({
         error: "Document has a problem",
@@ -160,7 +160,7 @@ exports.uploadDocument2 = (req, res) => {
     }
     //destructure the field
     const { photo } = fields; //basically price=fields.price is executing here.
-    console.log(fields, "f");
+    // console.log(fields, "f");
 
     //     if(
     //         (!photos || !student_files) ||
@@ -200,7 +200,7 @@ exports.uploadDocument2 = (req, res) => {
       classroom
         .save()
         .then((classroom) => res.json(classroom))
-        .catch((err) => console.log(err));
+        // .catch((err) => console.log(err));
     });
   });
 };
@@ -211,7 +211,7 @@ exports.uploadAssignment = (req, res) => {
   let form = new formidable.IncomingForm();
   form.keepExtensions = true;
   form.parse(req, (err, fields, files) => {
-    console.log("---");
+    // console.log("---");
     if (err) {
       return res.status(400).json({
         error: "Document has a problem",
@@ -219,7 +219,7 @@ exports.uploadAssignment = (req, res) => {
     }
     //destructure the field
     const { photo } = fields; //basically price=fields.price is executing here.
-    console.log(fields, "f");
+    // console.log(fields, "f");
     //handle files here
     let product = new AssignmentO(fields);
     const classroom = req.Classroom;
@@ -247,7 +247,7 @@ exports.uploadAssignment = (req, res) => {
       classroom
         .save()
         .then((classroom) => res.json(classroom))
-        .catch((err) => console.log(err));
+        // .catch((err) => console.log(err));
     });
   });
 };
@@ -259,7 +259,7 @@ exports.uploadAnswer = (req, res) => {
   let form = new formidable.IncomingForm();
   form.keepExtensions = true;
   form.parse(req, (err, fields, files) => {
-    console.log("---");
+    // console.log("---");
     if (err) {
       return res.status(400).json({
         error: "Document has a problem",
@@ -267,7 +267,7 @@ exports.uploadAnswer = (req, res) => {
     }
     //destructure the field
     const { photo } = fields; //basically price=fields.price is executing here.
-    console.log(fields, "f");
+    // console.log(fields, "f");
     //handle files here
     let product = new AnswerO(fields);
     const classroom = req.Classroom;
@@ -303,7 +303,7 @@ exports.uploadAnswer = (req, res) => {
 exports.getDocumentById = (req, res, next, id) => {
   DocumentO.findById(id).exec((err, obj) => {
     if (err || !obj) {
-      console.log(err);
+      // console.log(err);
       return res.status(400).json({
         error: "No such Document exits",
       });
@@ -316,7 +316,7 @@ exports.getDocumentById = (req, res, next, id) => {
 exports.getAssignmentById = (req, res, next, id) => {
   AssignmentO.findById(id).exec((err, obj) => {
     if (err || !obj) {
-      console.log(err);
+      // console.log(err);
       return res.status(400).json({
         error: "No such Document exits",
       });
@@ -329,7 +329,7 @@ exports.getAssignmentById = (req, res, next, id) => {
 exports.getAnswerById = (req, res, next, id) => {
   AnswerO.findById(id).exec((err, obj) => {
     if (err || !obj) {
-      console.log(err);
+      // console.log(err);
       return res.status(400).json({
         error: "No such Answer exists",
       });
@@ -341,16 +341,16 @@ exports.getAnswerById = (req, res, next, id) => {
 
 exports.getAllMembers = (req, res) => {
   const classroom = req.Classroom;
-  console.log(req + "heeeee");
+  // console.log(req + "heeeee");
   classroom.members.map((obj, i) => {
     User.find().exec((err, user) => {
       if (err || !user) {
-        console.log(err);
+        // console.log(err);
         return res.status(400).json({
           error: "Users Do Not Exist",
         });
       }
-      console.log(user);
+      // console.log(user);
       user.map((o, i) => {
         if (o._id.toString() === obj.toString()) {
           o.encry_password = "";
@@ -383,7 +383,7 @@ exports.removeDocument = (req, res) => {
         res.json(updatedClassroom);
       });
     })
-    .catch((err) => console.log(err));
+    // .catch((err) => console.log(err));
 };
 
 exports.removeAssignment = (req, res) => {
@@ -412,5 +412,5 @@ exports.removeAssignment = (req, res) => {
         res.json(updatedClassroom);
       });
     })
-    .catch((err) => console.log(err));
+    // .catch((err) => console.log(err));
 };

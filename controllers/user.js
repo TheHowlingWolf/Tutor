@@ -39,6 +39,17 @@ exports.getAllUsers = (req, res, next) => {
   });
 };
 
+exports.getAllUsers = (req, res, next) => {
+  User.find({}).exec((err, users) => {
+    if (err || !users) {
+      return res.status(400).json({
+        error: 'No User found.',
+      });
+    }
+    return res.status(200).json(users);
+  });
+};
+
 exports.getResponsebyUser = (req, res) => {
   User.find({ _id: req.user._id })
     .select('-img')
@@ -144,6 +155,7 @@ exports.addSubjects = (req, res) => {
             user.subject.map((obj, i) => {
               if (obj._id.toString() === subject._id.toString()) {
                 obj.value = req.body.value;
+                obj.expiresOn = req.body.expiresOn;
               }
             });
           } else {

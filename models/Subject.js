@@ -10,6 +10,13 @@ const SubjectSchema = new mongoose.Schema({
     },
     value: {
         type: Number
+    },
+    standard: {
+        type: Number,
+        required: true
+    },
+    expiresOn: {
+        type: Date
     }
     
 })
