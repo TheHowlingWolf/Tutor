@@ -4,6 +4,7 @@ const Classroom = require('../models/Classroom');
 const Class = require('../models/Class');
 const Response = require('../models/Responses');
 const { escapeRegex } = require('../utils/regexUtils');
+const { body } = require('express-validator');
 
 //finding user
 exports.getUserById = (req, res, next, id) => {
@@ -152,10 +153,15 @@ exports.addSubjects = (req, res) => {
             // user.subject.findById(req.body.subject_id)
             // .then(subjects => subjects.value = req.body.value)
             // .catch(err => console.log("error in changing value "+err))
+            console.log(
+              typeof new Date(req.body.expiresOn),
+              ':::::',
+              new Date(req.body.expiresOn)
+            );
             user.subject.map((obj, i) => {
               if (obj._id.toString() === subject._id.toString()) {
                 obj.value = req.body.value;
-                obj.expiresOn = req.body.expiresOn;
+                obj.expiresOn = new Date(req.body.expiresOn);
               }
             });
           } else {
