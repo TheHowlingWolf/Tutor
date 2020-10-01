@@ -6,8 +6,8 @@ const User = require("../models/user");
 const users = [];
 const path = require("path");
 const formidable = require("formidable");
-const _ = require("lodash"); //we use _ when we need to declare a private variable but not going to use too much of it
-const fs = require("fs"); //present by default in node no need to install
+const _ = require("lodash"); 
+const fs = require("fs"); 
 
 exports.getClassroomById = (req, res, next, id) => {
   Classroom.findById(id)
@@ -15,7 +15,7 @@ exports.getClassroomById = (req, res, next, id) => {
     .populate({ path: "owner" })
     .exec((err, obj) => {
       if (err || !obj) {
-        // console.log(err);
+        
         return res.status(400).json({
           error: "No such Class Room exits",
         });
@@ -26,12 +26,6 @@ exports.getClassroomById = (req, res, next, id) => {
 };
 exports.createClassroom = (req, res) => {
   const classroom = new Classroom(req.body);
-
-  // User.findById(req.user.id)
-  // .then(user => {
-  //     classroom.owner = user;
-  // })
-  // .catch(err => console.log("error while adding owner " + err))
   classroom.save((err, classroom) => {
     if (err || !classroom) {
       return res.status(400).json({
@@ -48,25 +42,25 @@ exports.getAllClassrooms = (req, res) => {
     .populate({ path: "owner" })
     .exec((err, cat) => {
       if (err || !cat) {
-        // console.log(err);
+        
         return res.status(400).json({
           error: "Classrooms Do Not Exist",
         });
       }
-      console.log(cat)
+      // console.log(cat)
       res.json(cat);
     });
 };
 
 exports.getAClassroom = (req, res) => {
   const classroom = req.Classroom;
-  console.log(classroom)
+  // console.log(classroom)
   res.json(classroom);
 };
 
 exports.removeClassroom = (req, res) => {
   const classroom = req.Classroom;
-  // console.log(classroom);
+  
   classroom.remove((err, obj) => {
     if (err || !obj) {
       return res.status(400).json({
@@ -81,7 +75,7 @@ exports.removeClassroom = (req, res) => {
 
 exports.updateClassroom = (req, res) => {
   const classroom = req.Classroom;
-  // console.log(classroom);
+  
   classroom.name = req.body.name;
   classroom.description = req.body.description;
   classroom.subject = req.body.subject;
@@ -139,47 +133,34 @@ exports.addMembers = (req, res) => {
         return res.status(400).json({ error: "Member already exists" });
       }
       classroom.members.unshift(user);
-      // console.log(user);
+      
       classroom
         .save()
         .then((classroom) => res.json(classroom))
-        // .catch((err) => console.log(err));
+        
     })
-    // .catch((err) => console.log(err));
+    
 };
 
 exports.uploadDocument2 = (req, res) => {
   let form = new formidable.IncomingForm();
   form.keepExtensions = true;
   form.parse(req, (err, fields, files) => {
-    // console.log("---");
+    
     if (err) {
       return res.status(400).json({
         error: "Document has a problem",
       });
     }
-    //destructure the field
-    const { photo } = fields; //basically price=fields.price is executing here.
-    // console.log(fields, "f");
+    
+    const { photo } = fields; 
 
-    //     if(
-    //         (!photos || !student_files) ||
-    //         !name ||
-    //         !date
-    //     ){
-
-    //             return res.status(400).json({
-    //                 error: "Fields are missing"
-    //             })
-
-    // }
-
-    //handle files here
+    
     let product = new DocumentO(fields);
     const classroom = req.Classroom;
     if (files.photo) {
       if (files.photo.size > 30000000) {
-        //30mb
+        
         return res.status(400).json({
           error: "Files size exceeded",
         });
@@ -200,32 +181,32 @@ exports.uploadDocument2 = (req, res) => {
       classroom
         .save()
         .then((classroom) => res.json(classroom))
-        // .catch((err) => console.log(err));
+        
     });
   });
 };
 
-// upload Assignment
+
 
 exports.uploadAssignment = (req, res) => {
   let form = new formidable.IncomingForm();
   form.keepExtensions = true;
   form.parse(req, (err, fields, files) => {
-    // console.log("---");
+    
     if (err) {
       return res.status(400).json({
         error: "Document has a problem",
       });
     }
-    //destructure the field
-    const { photo } = fields; //basically price=fields.price is executing here.
-    // console.log(fields, "f");
-    //handle files here
+    
+    const { photo } = fields; 
+    
+    
     let product = new AssignmentO(fields);
     const classroom = req.Classroom;
     if (files.photo) {
       if (files.photo.size > 30000000) {
-        //30mb
+        
         return res.status(400).json({
           error: "Files size exceeded",
         });
@@ -247,33 +228,33 @@ exports.uploadAssignment = (req, res) => {
       classroom
         .save()
         .then((classroom) => res.json(classroom))
-        // .catch((err) => console.log(err));
+        
     });
   });
 };
 
-//upload Answers
-// upload Assignment
+
+
 
 exports.uploadAnswer = (req, res) => {
   let form = new formidable.IncomingForm();
   form.keepExtensions = true;
   form.parse(req, (err, fields, files) => {
-    // console.log("---");
+    
     if (err) {
       return res.status(400).json({
         error: "Document has a problem",
       });
     }
-    //destructure the field
-    const { photo } = fields; //basically price=fields.price is executing here.
-    // console.log(fields, "f");
-    //handle files here
+    
+    const { photo } = fields; 
+    
+    
     let product = new AnswerO(fields);
     const classroom = req.Classroom;
     if (files.photo) {
       if (files.photo.size > 30000000) {
-        //30mb
+        
         return res.status(400).json({
           error: "Files size exceeded",
         });
@@ -303,7 +284,7 @@ exports.uploadAnswer = (req, res) => {
 exports.getDocumentById = (req, res, next, id) => {
   DocumentO.findById(id).exec((err, obj) => {
     if (err || !obj) {
-      // console.log(err);
+      
       return res.status(400).json({
         error: "No such Document exits",
       });
@@ -316,7 +297,7 @@ exports.getDocumentById = (req, res, next, id) => {
 exports.getAssignmentById = (req, res, next, id) => {
   AssignmentO.findById(id).exec((err, obj) => {
     if (err || !obj) {
-      // console.log(err);
+      
       return res.status(400).json({
         error: "No such Document exits",
       });
@@ -329,7 +310,7 @@ exports.getAssignmentById = (req, res, next, id) => {
 exports.getAnswerById = (req, res, next, id) => {
   AnswerO.findById(id).exec((err, obj) => {
     if (err || !obj) {
-      // console.log(err);
+      
       return res.status(400).json({
         error: "No such Answer exists",
       });
@@ -341,16 +322,16 @@ exports.getAnswerById = (req, res, next, id) => {
 
 exports.getAllMembers = (req, res) => {
   const classroom = req.Classroom;
-  // console.log(req + "heeeee");
+  
   classroom.members.map((obj, i) => {
     User.find().exec((err, user) => {
       if (err || !user) {
-        // console.log(err);
+        
         return res.status(400).json({
           error: "Users Do Not Exist",
         });
       }
-      // console.log(user);
+      
       user.map((o, i) => {
         if (o._id.toString() === obj.toString()) {
           o.encry_password = "";
@@ -383,7 +364,7 @@ exports.removeDocument = (req, res) => {
         res.json(updatedClassroom);
       });
     })
-    // .catch((err) => console.log(err));
+    
 };
 
 exports.removeAssignment = (req, res) => {
@@ -412,5 +393,5 @@ exports.removeAssignment = (req, res) => {
         res.json(updatedClassroom);
       });
     })
-    // .catch((err) => console.log(err));
+    
 };

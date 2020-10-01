@@ -12,6 +12,7 @@ exports.getClassById = (req, res, next, id) => {
         next();
     })
 }
+
 exports.createClass = (req,res) =>{
     console.log(req)
     const classO = new ClassO(req.body);
@@ -36,7 +37,6 @@ exports.createClass = (req,res) =>{
             res.json(cat);
         })
     }
-
     exports.getAClass = (req,res) =>{
         console.log(req.classO);
         return res.json(req.classO);
@@ -60,7 +60,6 @@ exports.createClass = (req,res) =>{
     }
     
     exports.updateClass = (req,res) =>{
-    
         const classO = req.classO;
         classO.classLink = req.body.classLink;
         classO.subject = req.body.subject;
@@ -76,4 +75,12 @@ exports.createClass = (req,res) =>{
            res.json(updatedclassO)
         })
         
+    }
+
+    exports.getUserClass = (req,res)=>{
+        console.log(req.user.subject)
+        req.user.subject.forEach()
+        ClassO.find({
+
+        })
     }

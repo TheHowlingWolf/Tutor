@@ -40,8 +40,12 @@ exports.getAllUsers = (req, res, next) => {
   });
 };
 
-exports.getAllUsers = (req, res, next) => {
-  User.find({}).exec((err, users) => {
+exports.getExpiredUsers = (req, res, next) => {
+  
+  User
+    .find({
+      'subject.expiresOn': { $lt: new Date(Date.now()) },
+    }).exec((err, users) => {
     if (err || !users) {
       return res.status(400).json({
         error: 'No User found.',
@@ -200,6 +204,7 @@ exports.addSubjects = (req, res) => {
 exports.buySubjects = (req, res) => {
   const Subjects = req.body.subject;
   var updatesubject;
+  console.log(Subjects)
   User.findById(req.body.user_id)
     .then((user) => {
       updatesubject = user.subject;
@@ -212,18 +217,34 @@ exports.buySubjects = (req, res) => {
                 (subjects) => subjects._id.toString() === subject._id.toString()
               ).length > 0
             ) {
-              updatesubject.map((obj, i) => {
+              updatesubject.map(async (obj, i) => {
                 if (obj._id.toString() === subject._id.toString()) {
-                  obj.value = parseInt(obj.value) + parseInt(sub[0].count);
+                  // obj.value = parseInt(obj.value) + parseInt(sub[0].count);
+                  if(obj.expiresOn)
+                  obj.expiresOn.setMonth(obj.expiresOn.getMonth()+parseInt(sub[0].count));
+                  else
+                  {
+                  obj.expiresOn= await Promise.resolve(new Date())
+                  obj.expiresOn.setMonth(obj.expiresOn.getMonth()+parseInt(sub[0].count));
+                  console.log(obj,obj.expiresOn,"jguyfgh")
+                }
                 }
               });
             } else {
+              subject.expiresOn = new Date();
               if (sub[0].count !== 0) {
                 subject.value = sub[0].count;
+                async function update(){
+                subject.expiresOn= await Promise.resolve(new Date())
+                subject.expiresOn.setMonth(obj.expiresOn.getMonth()+parseInt(sub[0].count));
+                }
+                update()
               }
+              console.log(subject,"ooo")
               updatesubject.unshift(subject);
             }
             user.subject = updatesubject;
+            console.log(updatesubject,user,"ll")
             User.findByIdAndUpdate(
               { _id: req.body.user_id },
               { $set: user },

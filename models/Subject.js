@@ -17,8 +17,11 @@ const SubjectSchema = new mongoose.Schema({
     },
     expiresOn: {
         type: Date
+    },
+    teacher:{
+        type: mongoose.Types.ObjectId,
+        ref: "User"
     }
-    
 })
 
 module.exports = mongoose.model("Subject", SubjectSchema);
