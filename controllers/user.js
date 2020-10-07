@@ -9,8 +9,7 @@ const { body } = require('express-validator');
 //finding user
 exports.getUserById = (req, res, next, id) => {
   console.log('kk');
-  User.findById(id)
-  .exec((err, user) => {
+  User.findById(id).exec((err, user) => {
     if (err || !user) {
       return res.status(400).json({
         error: 'No User is found in Database',
@@ -43,7 +42,7 @@ exports.getAllUsers = (req, res, next) => {
 
 //Getting All Teachers
 exports.getAllTeachers = (req, res, next) => {
-  User.find({role: 1}).exec((err, users) => {
+  User.find({ role: 1 }).exec((err, users) => {
     if (err || !users) {
       return res.status(400).json({
         error: 'No User found.',
@@ -54,11 +53,9 @@ exports.getAllTeachers = (req, res, next) => {
 };
 
 exports.getExpiredUsers = (req, res, next) => {
-  
-  User
-    .find({
-      'subject.expiresOn': { $lt: new Date(Date.now()) },
-    }).exec((err, users) => {
+  User.find({
+    'subject.expiresOn': { $lt: new Date(Date.now()) },
+  }).exec((err, users) => {
     if (err || !users) {
       return res.status(400).json({
         error: 'No User found.',
@@ -186,9 +183,9 @@ exports.addSubjects = (req, res) => {
             if (req.body.value !== 0) {
               subject.value = req.body.value;
             }
-            subject.classes=[]
-            subject.quizzes=[]
-            subject.classroom=[]
+            subject.classes = [];
+            subject.quizzes = [];
+            subject.classroom = [];
             user.subject.unshift(subject);
           }
           console.log(user);
@@ -221,7 +218,7 @@ exports.addSubjects = (req, res) => {
 exports.buySubjects = (req, res) => {
   const Subjects = req.body.subject;
   var updatesubject;
-  console.log(Subjects)
+  console.log(Subjects);
   User.findById(req.body.user_id)
     .then((user) => {
       updatesubject = user.subject;
@@ -237,31 +234,36 @@ exports.buySubjects = (req, res) => {
               updatesubject.map(async (obj, i) => {
                 if (obj._id.toString() === subject._id.toString()) {
                   // obj.value = parseInt(obj.value) + parseInt(sub[0].count);
-                  if(obj.expiresOn)
-                  obj.expiresOn.setMonth(obj.expiresOn.getMonth()+parseInt(sub[0].count));
-                  else
-                  {
-                  obj.expiresOn= await Promise.resolve(new Date())
-                  obj.expiresOn.setMonth(obj.expiresOn.getMonth()+parseInt(sub[0].count));
-                  console.log(obj,obj.expiresOn,"jguyfgh")
-                }
+                  if (obj.expiresOn)
+                    obj.expiresOn.setMonth(
+                      obj.expiresOn.getMonth() + parseInt(sub[0].count)
+                    );
+                  else {
+                    obj.expiresOn = await Promise.resolve(new Date());
+                    obj.expiresOn.setMonth(
+                      obj.expiresOn.getMonth() + parseInt(sub[0].count)
+                    );
+                    console.log(obj, obj.expiresOn, 'jguyfgh');
+                  }
                 }
               });
             } else {
               subject.expiresOn = new Date();
               if (sub[0].count !== 0) {
                 subject.value = sub[0].count;
-                async function update(){
-                subject.expiresOn= await Promise.resolve(new Date())
-                subject.expiresOn.setMonth(obj.expiresOn.getMonth()+parseInt(sub[0].count));
+                async function update() {
+                  subject.expiresOn = await Promise.resolve(new Date());
+                  subject.expiresOn.setMonth(
+                    obj.expiresOn.getMonth() + parseInt(sub[0].count)
+                  );
                 }
-                update()
+                update();
               }
-              console.log(subject,"ooo")
+              console.log(subject, 'ooo');
               updatesubject.unshift(subject);
             }
             user.subject = updatesubject;
-            console.log(updatesubject,user,"ll")
+            console.log(updatesubject, user, 'll');
             User.findByIdAndUpdate(
               { _id: req.body.user_id },
               { $set: user },
@@ -276,6 +278,7 @@ exports.buySubjects = (req, res) => {
                 user.encry_password = undefined;
                 user.createdAt = undefined;
                 user.updatedAt = undefined;
+                return res.json({ success: true });
               }
             );
           })

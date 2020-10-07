@@ -19,6 +19,8 @@ const documentRoutes = require('./routes/document');
 const subjectRoutes = require('./routes/subject');
 const standardRoutes = require('./routes/standard');
 const subscriberRoutes = require('./routes/subscriber');
+const contactRoutes = require('./routes/contact');
+
 const path = require('path');
 
 //Connecting Mongoose-mongodb
@@ -53,6 +55,7 @@ app.use('/api', documentRoutes);
 app.use('/api', subjectRoutes);
 app.use('/api', standardRoutes);
 app.use('/api', subscriberRoutes);
+app.use('/api', contactRoutes);
 
 app.get('/logo.svg', (req, res) => {
   res.sendFile(path.join(__dirname, 'logo.svg'));
