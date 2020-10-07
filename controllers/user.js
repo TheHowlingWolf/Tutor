@@ -8,7 +8,6 @@ const { body } = require('express-validator');
 
 //finding user
 exports.getUserById = (req, res, next, id) => {
-  console.log('kk');
   User.findById(id).exec((err, user) => {
     if (err || !user) {
       return res.status(400).json({
@@ -113,14 +112,13 @@ exports.updatedUser = (req, res) => {
 
 //update
 exports.getUserByEmailandUpdate = (req, res) => {
-  console.log(req.body, 'hh');
   User.find({ email: req.body.email }).exec((err, obj) => {
     if (err) {
       return res.status(400).json({
         error: 'Updating not authorized' + err,
       });
     }
-    console.log(obj);
+
     if (obj[0]) {
       User.findByIdAndUpdate(
         { _id: obj[0]._id },
@@ -157,9 +155,6 @@ exports.addSubjects = (req, res) => {
     .then((subject) => {
       User.findById(req.body.user_id)
         .then((user) => {
-          console.log('i was here ' + req.body.user_id);
-          console.log('i was here ' + req.body.subject_id);
-          console.log('i was here ' + req.body.value);
           if (
             user.subject.filter(
               (subjects) => subjects._id.toString() === subject._id.toString()
@@ -188,7 +183,7 @@ exports.addSubjects = (req, res) => {
             subject.classroom = [];
             user.subject.unshift(subject);
           }
-          console.log(user);
+
           // user.save()
           // .then(saved => res.json(saved))
           // .catch(err => console.log("subject not added to user "+err))
@@ -218,14 +213,13 @@ exports.addSubjects = (req, res) => {
 exports.buySubjects = (req, res) => {
   const Subjects = req.body.subject;
   var updatesubject;
-  console.log(Subjects);
+
   User.findById(req.body.user_id)
     .then((user) => {
       updatesubject = user.subject;
       Subjects.map((sub, i) => {
         Subject.findById(sub[0].id)
           .then((subject) => {
-            console.log(subject);
             if (
               updatesubject.filter(
                 (subjects) => subjects._id.toString() === subject._id.toString()
@@ -243,7 +237,6 @@ exports.buySubjects = (req, res) => {
                     obj.expiresOn.setMonth(
                       obj.expiresOn.getMonth() + parseInt(sub[0].count)
                     );
-                    console.log(obj, obj.expiresOn, 'jguyfgh');
                   }
                 }
               });
@@ -259,11 +252,11 @@ exports.buySubjects = (req, res) => {
                 }
                 update();
               }
-              console.log(subject, 'ooo');
+
               updatesubject.unshift(subject);
             }
             user.subject = updatesubject;
-            console.log(updatesubject, user, 'll');
+
             User.findByIdAndUpdate(
               { _id: req.body.user_id },
               { $set: user },
@@ -290,7 +283,7 @@ exports.buySubjects = (req, res) => {
 
 exports.studentClassrooms = (req, res) => {
   const subclass = [];
-  console.log(req.body);
+
   User.findById(req.body.user_id).exec((err, user) => {
     if (err || !user) {
       return res.status(400).json({
@@ -323,7 +316,6 @@ exports.studentClassrooms = (req, res) => {
               ).length === 0 ||
               obj.members.length === 0
             ) {
-              console.log('hi');
               obj.members.unshift(userO._id);
               obj.save();
             }
@@ -337,7 +329,7 @@ exports.studentClassrooms = (req, res) => {
 
 exports.studentClasses = (req, res) => {
   const subclass = [];
-  // console.log(req.body)
+
   User.findById(req.body.user_id).exec((err, user) => {
     if (err || !user) {
       return res.status(400).json({
@@ -374,7 +366,7 @@ exports.studentClasses = (req, res) => {
 exports.searchUser = async (req, res) => {
   try {
     const { name, email } = req.body;
-    console.log(req.body);
+
     const filter = {};
     if (name) {
       const nameRegex = new RegExp(escapeRegex(name.toLowerCase()), 'gi');
@@ -384,9 +376,9 @@ exports.searchUser = async (req, res) => {
       const emailRegex = new RegExp(escapeRegex(email.toLowerCase()), 'gi');
       filter.email = emailRegex;
     }
-    console.log(filter);
+
     const users = await User.find(filter);
-    console.log(users);
+
     res.json({ users });
   } catch (error) {
     console.log(error);

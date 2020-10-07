@@ -5,7 +5,7 @@ exports.createSubscriber = (req, res) => {
   newSub
     .save()
     .then((subs) => {
-      console.log(subs);
+      
       res.json(subs);
     })
     .catch((err) => {

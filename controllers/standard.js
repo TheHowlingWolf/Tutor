@@ -40,14 +40,14 @@ exports.getAllStandards = (req, res) => {
 }
 
 exports.getAStandard = (req,res) =>{
-    console.log(req.standard);
+    
     return res.json(req.standard);
 }
 
 exports.removeStandard = (req,res) =>{
-    console.log("hi")
+    
     const standard = req.standard;
-    console.log(req.standard);
+    
     standard.remove((err,std)=>{
         if(err){
             return res.status(400).json({
