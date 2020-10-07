@@ -11,11 +11,9 @@ const ClassRoomSchema = new mongoose.Schema({
         required: true
     },
     subject:{
-        type: String
+        type: mongoose.Types.ObjectId,
+        ref: 'Subject'
       },
-    standard:{
-        type: Number
-    },
     image: {
         data: Buffer,
         contentType: String

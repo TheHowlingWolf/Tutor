@@ -8,22 +8,14 @@ const quizSchema = new Mongoose.Schema({
     trim: true,
   },
   subject: {
-    type: String,
-    required: true,
-    // ref: "Subject"
-  },
-  standard: {
-    type: String,
-    required: true
+    type: Mongoose.Schema.Types.ObjectId,
+    ref: 'Subject'
   },
   endTime: { 
     type: String
    },
   questions: [{ type: Mongoose.Schema.Types.ObjectId, ref: 'Question' }],
   responses: [{ type: Mongoose.Schema.Types.ObjectId, ref: 'Question' }],
-  start: { 
-    type: String
-   },
    teacher:{
      type: Mongoose.Schema.Types.ObjectId,
      ref: 'User'
@@ -31,6 +23,10 @@ const quizSchema = new Mongoose.Schema({
    duration: {
      type: Number,
      required: true
+   },
+   published:{
+     type: Boolean,
+     default: false
    }
   
 });

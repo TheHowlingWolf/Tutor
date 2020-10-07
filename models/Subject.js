@@ -21,7 +21,19 @@ const SubjectSchema = new mongoose.Schema({
     teacher:{
         type: mongoose.Types.ObjectId,
         ref: "User"
-    }
+    },
+    classes:[{
+        type: mongoose.Types.ObjectId,
+        ref: "Class"
+    }],
+    classroom:[{
+        type: mongoose.Types.ObjectId,
+        ref: "ClassRoom"
+    }],
+    quizzes:[{
+        type: mongoose.Types.ObjectId,
+        ref: "Quiz"
+    }]
 })
 
 module.exports = mongoose.model("Subject", SubjectSchema);

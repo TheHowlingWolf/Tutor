@@ -8,6 +8,7 @@ const path = require("path");
 const formidable = require("formidable");
 const _ = require("lodash"); 
 const fs = require("fs"); 
+const Subject = require("../models/Subject");
 
 exports.getClassroomById = (req, res, next, id) => {
   Classroom.findById(id)
@@ -26,13 +27,26 @@ exports.getClassroomById = (req, res, next, id) => {
 };
 exports.createClassroom = (req, res) => {
   const classroom = new Classroom(req.body);
-  classroom.save((err, classroom) => {
+  classroom.save(async (err, classroom) => {
     if (err || !classroom) {
       return res.status(400).json({
         error: "Please Enter All The Fields",
       });
     }
-    res.json({ classroom });
+    const pushclassroom = await Promise.resolve(req.subject.classroom.push(classroom._id));
+    req.subject.save()
+    .then(sub=>( res.status(200).json(classroom)))
+    .catch(err=>{
+      console.log(err)
+      Classroom.findByIdAndDelete(classroom._id)
+        .then((data) => {
+            return res.status(403).json({ error: "Cannot Add Classroom "+ err });
+          })
+          .catch((err) => {
+            console.log("Classroom Deletion Failed: ", err);
+          });
+    })
+    // res.json({ classroom });
   });
 };
 
@@ -40,11 +54,12 @@ exports.getAllClassrooms = (req, res) => {
   Classroom.find()
     .populate({ path: "members" })
     .populate({ path: "owner" })
+    .populate({ path: "subject" })
     .exec((err, cat) => {
       if (err || !cat) {
         
         return res.status(400).json({
-          error: "Classrooms Do Not Exist",
+          error: "Classrooms Do Not Exist" + err,
         });
       }
       // console.log(cat)
@@ -60,7 +75,6 @@ exports.getAClassroom = (req, res) => {
 
 exports.removeClassroom = (req, res) => {
   const classroom = req.Classroom;
-  
   classroom.remove((err, obj) => {
     if (err || !obj) {
       return res.status(400).json({
@@ -71,6 +85,27 @@ exports.removeClassroom = (req, res) => {
       message: obj.name + " classroom deleted",
     });
   });
+  Subject.updateOne(
+    { _id: req.Classroom.subject },
+    { $pull: { classroom: { $in: [req.Classroom._id] }}},
+    (err, cls) => {
+      if (err || !cls) {
+        return res.status(400).json({
+          error: "Classroom not deleted",
+        });
+      }
+      classroom.remove((err, sub) => {
+        if (err) {
+          return res.status(400).json({
+            error: "Failed to delete classroom",
+          });
+        }
+        // res.json({
+        //   message:  "Classroom deleted"
+        // });
+      });
+    }
+);
 };
 
 exports.updateClassroom = (req, res) => {
@@ -198,10 +233,7 @@ exports.uploadAssignment = (req, res) => {
         error: "Document has a problem",
       });
     }
-    
     const { photo } = fields; 
-    
-    
     let product = new AssignmentO(fields);
     const classroom = req.Classroom;
     if (files.photo) {
@@ -394,4 +426,37 @@ exports.removeAssignment = (req, res) => {
       });
     })
     
+};
+
+exports.studentClassroom = (req, res) => {
+  console.log(req.user,"lllpp")
+  User.findById(req.user._id).exec(async (err,userO)=>{
+    if(err || !userO){
+        console.log(err)
+    }
+    let crooms = [];
+    let c = 0
+    // console.log(userO,userO.subject)
+    userO.subject.map(y=>{
+        if(y.expiresOn>Date.now()){
+        Subject.findById(y._id).populate({path:"classroom",populate:{
+            path:"subject",select:"name"
+        }}).then(sub=>{     
+            sub.classroom.forEach(e=>{
+                crooms.push(e)
+            })
+            c=c+1
+            if(userO.subject.length == c){
+                res.json(crooms)
+            }
+        })
+    }
+    else{
+        c=c+1
+    }
+    })
+    if(userO.subject.length == c){
+        res.json(crooms)
+    }
+})
 };

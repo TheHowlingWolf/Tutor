@@ -15,7 +15,8 @@ const ClassSchema = new mongoose.Schema({
         // required: true
     },
     subject: {
-        type: String
+        type: mongoose.Types.ObjectId,
+        ref: 'Subject'
     },
     owner: {
         type: mongoose.Types.ObjectId,
@@ -23,7 +24,7 @@ const ClassSchema = new mongoose.Schema({
     },
     standard:{
         type: String,
-        required: true
+        
     },
     time:{
         type: String,

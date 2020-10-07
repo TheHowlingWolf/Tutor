@@ -9,7 +9,8 @@ const { body } = require('express-validator');
 //finding user
 exports.getUserById = (req, res, next, id) => {
   console.log('kk');
-  User.findById(id).exec((err, user) => {
+  User.findById(id)
+  .exec((err, user) => {
     if (err || !user) {
       return res.status(400).json({
         error: 'No User is found in Database',
@@ -31,6 +32,18 @@ exports.getOneUser = (req, res) => {
 //Getting All Users
 exports.getAllUsers = (req, res, next) => {
   User.find().exec((err, users) => {
+    if (err || !users) {
+      return res.status(400).json({
+        error: 'No User found.',
+      });
+    }
+    return res.status(200).json(users);
+  });
+};
+
+//Getting All Teachers
+exports.getAllTeachers = (req, res, next) => {
+  User.find({role: 1}).exec((err, users) => {
     if (err || !users) {
       return res.status(400).json({
         error: 'No User found.',
@@ -141,6 +154,7 @@ exports.getUserByEmailandUpdate = (req, res) => {
 //   subject_id:"hsddhkjsbkjjasdbhjadsb",
 //   user_id:"bkjasbjsbajhbjhds"
 // }
+
 exports.addSubjects = (req, res) => {
   Subject.findById(req.body.subject_id)
     .then((subject) => {
@@ -172,6 +186,9 @@ exports.addSubjects = (req, res) => {
             if (req.body.value !== 0) {
               subject.value = req.body.value;
             }
+            subject.classes=[]
+            subject.quizzes=[]
+            subject.classroom=[]
             user.subject.unshift(subject);
           }
           console.log(user);

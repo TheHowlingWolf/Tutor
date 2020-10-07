@@ -46,7 +46,7 @@ const userSchema = new mongoose.Schema(
       {
         type: Object,
         // type: mongoose.Types.ObjectId,
-        // ref: 'Subject'
+        ref: 'Subject'
       },
     ],
     email: {

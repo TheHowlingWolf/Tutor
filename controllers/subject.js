@@ -14,12 +14,11 @@ exports.getSubjectById = (req, res, next, id) => {
 }
 
 exports.addSubject = (req, res) => {
+    console.log(req.body)
     const subject = new Subject(req.body);
-
     subject.save().then(sub => {
         res.json({sub})
     }).catch(err => {
-        
         res.status(403).json({
             success: false,
             message: "Cannot Add Subject"
@@ -27,9 +26,8 @@ exports.addSubject = (req, res) => {
     })
 }
 
-
 exports.getAllSubjects = (req, res) => {
-    Subject.find().exec((err,sub)=>{
+    Subject.find().populate({ path: "teacher", select: "name" }).exec((err,sub)=>{
         if(err || !sub){
             return res.status(400).json({
                 error: "Subjects doesn't exist"
@@ -67,6 +65,7 @@ exports.updateSubject = (req,res) =>{
     subject.value = req.body.value;
     subject.standard = req.body.standard;
     subject.expiresOn = req.body.expiresOn;
+    subject.teacher = req.body.teacher;
     
     subject.save((err,updatedsubject) => {
         if(err || !updatedsubject){

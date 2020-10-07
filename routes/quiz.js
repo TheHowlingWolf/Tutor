@@ -1,10 +1,10 @@
 const express = require("express");
 const router = express.Router();
 
-const { getQuizById, createQuiz, createQuestion, getQuestionById,updateQuiz,getOptionById,getAOption, studentQuizes, getQuizQuestions,deleteQuiz,updateOption, createOption,deleteOption, getQuizByTeacher, getAQuiz,deleteQuestion ,updateQuestion, getAQuestion,img,createResponse } = require("../controllers/quiz")
+const { getQuizById, createQuiz, createQuestion, getQuestionById,updateQuiz,getOptionById,getAOption, studentQuizes, getQuizQuestions,deleteQuiz,updateOption, createOption,deleteOption, getQuizByTeacher, getAQuiz,deleteQuestion ,updateQuestion, getAQuestion,img,createResponse,publishQuiz } = require("../controllers/quiz")
 const { getUserById } = require("../controllers/user")
 const { isAdmin, isAuthenticated, isSignedIn } = require("../controllers/auth");
-const { addSubject } = require("../controllers/subject");
+const { addSubject, getSubjectById } = require("../controllers/subject");
 
 router.post("/subject/create",addSubject);
 //Setting User to Request
@@ -12,10 +12,14 @@ router.param("quizId", getQuizById);
 router.param("quesId", getQuestionById);
 router.param("optionId", getOptionById);
 router.param("userId", getUserById);
+router.param("subjectId", getSubjectById);
 
 
 //Operations
-router.post("/quiz/create", createQuiz);
+router.post("/quiz/create/:subjectId", createQuiz);
+
+//Publish
+router.post("/quiz/publish/:subjectId/:quizId", publishQuiz);
 
 router.put("/quiz/update/:quizId", updateQuiz);
 
@@ -47,7 +51,8 @@ router.get("/option/:optionId", getAOption);
 
 router.get("/quizzes/:userId", getQuizQuestions);
 
-router.post("/user/subquizes", studentQuizes);
+//Quiz for each student
+router.get("/user/subquizes/:userId", studentQuizes);
 
 
 module.exports = router;

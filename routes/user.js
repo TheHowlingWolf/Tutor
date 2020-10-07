@@ -14,7 +14,8 @@ const {
   buySubjects,
   getResponsebyUser,
   searchUser,
-  getExpiredUsers
+  getExpiredUsers,
+  getAllTeachers
 } = require('../controllers/user');
 
 const { isAdmin, isAuthenticated, isSignedIn } = require('../controllers/auth');
@@ -38,6 +39,9 @@ router.get('/user/response/:userId', getResponsebyUser);
 
 //Getting All User
 router.get('/users', getAllUsers);
+
+//Getting All User
+router.get('/teachers', getAllTeachers);
 
 //Expired users
 router.get('/expired/users', getExpiredUsers);

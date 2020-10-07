@@ -6,6 +6,7 @@ const formidable = require("formidable");
 const AnswerOptions = require("../models/AnswerOptions");
 const fs = require("fs");
 const User = require("../models/user");
+const Subject = require("../models/Subject");
 
 exports.getQuizById = (req, res, next, quizid) => {
   Quiz.findById(quizid)
@@ -38,6 +39,10 @@ exports.getAQuiz = (req, res) => {
             path: "student",
             model: "User",select: "name"
         }
+    })
+    .populate({
+      path: "subject",
+      select: "name standard"
     }).then(quiz => {
         res.status(200).json({ data: quiz })
     })
@@ -46,16 +51,28 @@ exports.getAQuiz = (req, res) => {
 
 exports.deleteQuiz = (req, res) => {
   const quiz = req.quiz;
-  quiz.remove((err, sub) => {
-    if (err) {
-      return res.status(400).json({
-        error: "Failed to delete quiz",
+  Subject.updateOne(
+    { _id: req.quiz.subject },
+    { $pull: { quizzes: { $in: [req.quiz._id] }}},
+    (err, cls) => {
+      if (err || !cls) {
+        return res.status(400).json({
+          error: "Quiz not deleted",
+        });
+      }
+      quiz.remove((err, sub) => {
+        if (err) {
+          return res.status(400).json({
+            error: "Failed to delete quiz",
+          });
+        }
+        res.json({
+          message:  "Quiz deleted",
+        });
       });
     }
-    res.json({
-      message: sub.name + " quiz deleted",
-    });
-  });
+);
+
 };
 
 exports.getQuestionById = (req, res, next, quesId) => {
@@ -96,30 +113,49 @@ exports.createQuiz = (req, res) => {
   const quiz = new Quiz({
     title: req.body.title,
     subject: req.body.subject,
-    standard: req.body.standard,
     endTime: req.body.endTime,
     start: req.body.start,
     teacher: req.body.teacher,
     duration: req.body.mm,
   });
 
-  quiz.save().then((quiz) => {
-    res.status(200).json({
-      data: quiz,
-    });
+  quiz.save().then(async (quizO) => {
+    const pushQuiz = await Promise.resolve(req.subject.quizzes.push(quizO._id));
+        req.subject.save()
+        .then(sub=>(res.status(200).json(quizO)))
+        .catch(err=>{
+            quiz.findByIdAndDelete(quiz._id)
+            .then((data) => {
+                res.status(403).json({ error: "Cannot Add Quiz" });
+              })
+              .catch((err) => {
+                console.log("Quiz Deletion Failed: ", err);
+              });
+        })
   });
 };
 
+//Basically adding to subject quiz array
+exports.publishQuiz = async (req,res) =>{
+  const pushClass = await Promise.resolve(req.subject.classes.push(req.quiz._id));
+  req.subject.save()
+      .then(sub=>(res.status(200).json(cls)))
+      .catch(err=>{
+          res.status(403).json({ error: "Failed to publish" });     
+      })
+}
+
 exports.updateQuiz = (req, res) => {
   const quiz = req.quiz;
-
-  (quiz.title = req.body.title),
-    (quiz.subject = req.body.subject),
-    (quiz.standard = req.body.standard),
-    (quiz.endTime = req.body.endTime),
-    (quiz.start = req.body.start),
-    (quiz.teacher = req.body.teacher),
-    (quiz.duration = req.body.mm);
+    {console.log(req.body)}
+    (req.body.title !== undefined && (quiz.title = req.body.title)),
+    (req.body.subject !== undefined && (quiz.subject = req.body.subject)),
+    (req.body.standard !== undefined && (quiz.standard = req.body.standard)),
+    (req.body.endTime !== undefined && (quiz.endTime = req.body.endTime)),
+    (req.body.start !== undefined && (quiz.start = req.body.start)),
+    (req.body.teacher !== undefined && (quiz.teacher = req.body.teacher)),
+    (req.body.mm !== undefined && (quiz.duration = req.body.mm));
+    (req.body.published !== undefined && (quiz.published = req.body.published));
 
   quiz.save().then((quiz) => {
     res.status(200).json({
@@ -322,6 +358,17 @@ exports.deleteQuestion = (req, res) => {
           error: "Question not deleted",
         });
       }
+      QuizQuestions.remove((err,cat)=>{
+        if(err){
+            return res.status(400).json({
+                error: "Failed to delete question"
+            })
+        }
+        res.json({
+            message: "Question deleted",
+            data: ques
+        });
+        })
       res.json(ques);
     }
   );
@@ -386,24 +433,14 @@ exports.img = (req, res, next) => {
   next();
 };
 
+//Quiz for teachers
 exports.getQuizQuestions = (req, res) => {
-  Quiz.find()
-    .select("-img")
+  Quiz.find({
+    teacher: req.user._id,
+  })
     .populate({
-      path: "questions",
-      select: "-img",
-      populate: {
-        path: "options",
-        model: "AnswerOption",
-      },
-    })
-    .populate({
-      path: "responses",
-      model: "Response",
-      populate: {
-        path: "response",
-        model: "AnswerOption",
-      },
+      path: "subject",
+      select: "name standard"
     })
     .then((quiz) => {
       res.status(200).json({ data: quiz });
@@ -420,7 +457,8 @@ exports.getQuizByTeacher = (req, res) => {
     });
 };
 
-exports.studentQuizes = (req, res) => {
+//Quiz for each student
+exports.studentQuizes2 = (req, res) => {
   const subquiz = [];
   // console.log(req.body)
   UserO.findById(req.body.user_id).exec((err, user) => {
@@ -465,4 +503,39 @@ exports.studentQuizes = (req, res) => {
         res.json(subquiz);
       });
   });
+};
+
+//Quiz for each student
+exports.studentQuizes = (req, res) => {
+  User.findById(req.user._id).exec(async (err,userO)=>{
+    if(err || !userO){
+        console.log(err)
+    }
+    let quizzess = [];
+    let c = 0
+    // console.log(userO,userO.subject)
+    userO.subject.map(y=>{
+        if(y.expiresOn>Date.now()){
+        Subject.findById(y._id).populate({path:"quizzes",populate:{
+            path:"subject",select:"name"
+        }}).then(sub=>{     
+            sub.quizzes.forEach(e=>{
+              console.log(e)
+              if(e.published)
+                quizzess.push(e)
+            })
+            c=c+1
+            if(userO.subject.length == c){
+                res.json(quizzess)
+            }
+        })
+    }
+    else{
+        c=c+1
+    }
+    })
+    if(userO.subject.length == c){
+        res.json(quizzess)
+    }
+})
 };
