@@ -8,7 +8,15 @@ const { body } = require('express-validator');
 
 //finding user
 exports.getUserById = (req, res, next, id) => {
-  User.findById(id).exec((err, user) => {
+  User.findById(id)
+  .populate({ path: 'quiz', 
+  model: 'Quiz',
+  populate: {
+    path: 'responses',
+    model: 'Response'
+    }
+   })
+  .exec((err, user) => {
     if (err || !user) {
       return res.status(400).json({
         error: 'No User is found in Database',
@@ -25,6 +33,30 @@ exports.getOneUser = (req, res) => {
   req.user.encry_password = undefined;
   req.user.proPic = undefined;
   return res.status(200).json(req.user);
+};
+
+//Get a user's Quiz Record
+exports.getOneUserQuizResult = (req, res) => {
+  let QuizMarks=[];
+  let index=[];
+  let Quiznames=[];
+  req.user.quiz.map((o,i) => {
+  index.push(i+1);
+  Quiznames.push(o.title);
+    let totalMarks = parseInt(o.questions.length);
+    let obtainedMarks = 0;
+    o.responses.map((obj,i) => {
+      if(toString(obj.student) === toString(req.user._id)){
+         obtainedMarks = parseInt(obj.totalMarks);
+      }
+    })
+    QuizMarks.push(parseInt((obtainedMarks/totalMarks)*100))
+  })
+  return res.status(200).json({
+    QuizPercentage: QuizMarks,
+    QuizIndex: index,
+    Quiznames: Quiznames
+  });
 };
 
 //Getting All Users

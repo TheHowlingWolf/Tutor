@@ -15,7 +15,8 @@ const {
   getResponsebyUser,
   searchUser,
   getExpiredUsers,
-  getAllTeachers
+  getAllTeachers,
+  getOneUserQuizResult
 } = require('../controllers/user');
 
 const { isAdmin, isAuthenticated, isSignedIn } = require('../controllers/auth');
@@ -27,6 +28,9 @@ router.param('userId', getUserById);
 
 //Getting One User
 router.get('/user/:userId', isSignedIn, getOneUser);
+
+//Getting One User Quiz Result
+router.get('/user/quiz/result/:userId', isSignedIn, getOneUserQuizResult);
 
 //Updating user
 router.put('/update/:userId', isSignedIn, updatedUser);
