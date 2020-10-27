@@ -30,7 +30,7 @@ router.param('userId', getUserById);
 router.get('/user/:userId', isSignedIn, getOneUser);
 
 //Getting One User Quiz Result
-router.get('/user/quiz/result/:userId', isSignedIn, getOneUserQuizResult);
+router.get('/user/quiz/result/:userId', isSignedIn,  getOneUserQuizResult);
 
 //Updating user
 router.put('/update/:userId', isSignedIn, updatedUser);

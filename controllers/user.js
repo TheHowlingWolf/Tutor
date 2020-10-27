@@ -42,7 +42,7 @@ exports.getOneUserQuizResult = (req, res) => {
   let Quiznames=[];
   req.user.quiz.map((o,i) => {
   index.push(i+1);
-  Quiznames.push(o.title);
+  Quiznames.push(`${i+1}.${o.title}`);
     let totalMarks = parseInt(o.questions.length);
     let obtainedMarks = 0;
     o.responses.map((obj,i) => {
