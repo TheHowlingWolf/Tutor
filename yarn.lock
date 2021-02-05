@@ -553,10 +553,10 @@ etag@~1.8.1:
   resolved "https://registry.yarnpkg.com/etag/-/etag-1.8.1.tgz#41ae2eeb65efa62268aebfea83ac7d79299b0887"
   integrity sha1-Qa4u62XvpiJorr/qg6x9eSmbCIc=
 
-express-fileupload@^1.1.7-alpha.4:
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/express-fileupload/-/express-fileupload-1.2.0.tgz#356c4dfd645be71ab9fb2f4e6d84eeb00d247979"
-  integrity sha512-oe4WpKcSppXnl5peornawWUa6tKmIc1/kJxMNRGJR1A0v4zyLL6VsFR6wZ8P2a4Iq3aGx8xae3Vlr+MOMQhFPw==
+express-fileupload@^1.1.10:
+  version "1.1.10"
+  resolved "https://registry.yarnpkg.com/express-fileupload/-/express-fileupload-1.1.10.tgz#c4a223b2020e5175498ab684566fc430ec9c8b15"
+  integrity sha512-VEbeJBMDl+N+I/vXjQ17Xg+R35El6l6n/EELcSSpnwQbjqFmtAfXY9p5NpBpto5FqnksIleYImJ1jNlIWlP2aw==
   dependencies:
     busboy "^0.3.1"
 
@@ -1064,6 +1064,16 @@ latest-version@^5.0.0:
   dependencies:
     package-json "^6.3.0"
 
+lodash.foreach@^4.1.0:
+  version "4.5.0"
+  resolved "https://registry.yarnpkg.com/lodash.foreach/-/lodash.foreach-4.5.0.tgz#1a6a35eace401280c7f06dddec35165ab27e3e53"
+  integrity sha1-Gmo16s5AEoDH8G3d7DUWWrJ+PlM=
+
+lodash.get@^4.0.2:
+  version "4.4.2"
+  resolved "https://registry.yarnpkg.com/lodash.get/-/lodash.get-4.4.2.tgz#2d177f652fa31e939b4438d5341499dfa3825e99"
+  integrity sha1-LRd/ZS+jHpObRDjVNBSZ36OCXpk=
+
 lodash.includes@^4.3.0:
   version "4.3.0"
   resolved "https://registry.yarnpkg.com/lodash.includes/-/lodash.includes-4.3.0.tgz#60bb98a87cb923c68ca1e51325483314849f553f"
@@ -1219,6 +1229,14 @@ mongoose-legacy-pluralize@1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/mongoose-legacy-pluralize/-/mongoose-legacy-pluralize-1.0.2.tgz#3ba9f91fa507b5186d399fb40854bff18fb563e4"
   integrity sha512-Yo/7qQU4/EyIS8YDFSeenIvXxZN+ld7YdV9LqFVQJzTLye8unujAWPZ4NWKfFA+RNjh+wvTWKY9Z3E5XM6ZZiQ==
+
+mongoose-unique-validator@^2.0.3:
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/mongoose-unique-validator/-/mongoose-unique-validator-2.0.3.tgz#247adbcda391bf5bc63fc3dcd43286a9ec833fa4"
+  integrity sha512-3/8pmvAC1acBZS6eWKAWQUiZBlARE1wyWtjga4iQ2wDJeOfRlIKmAvTNHSZXKaAf7RCRUd7wh7as6yWAOrjpQg==
+  dependencies:
+    lodash.foreach "^4.1.0"
+    lodash.get "^4.0.2"
 
 mongoose@^5.9.15:
   version "5.10.6"
